@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة ألعاب التكتيك الرياضي | Sport Mafia 2026 - الإصدار التجاري الآمن والمثبت (Production Ready)</title>
+    <title>منصة ألعاب التكتيك الرياضي | Sport Club 2026 - الإصدار المحلي الاحترافي (TV Mode)</title>
     <!-- Google Fonts: Cairo -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
     <!-- FontAwesome Icons -->
@@ -12,7 +12,7 @@
     <style>
         :root {
             --bg-color: #030705;
-            --card-bg: rgba(8, 20, 14, 0.88);
+            --card-bg: rgba(8, 20, 14, 0.94);
             --glass-border: rgba(0, 255, 128, 0.22);
             --primary-green: #00ff80;
             --secondary-green: #00b359;
@@ -66,11 +66,12 @@
 
         .screen {
             display: none; opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateY(20px) scale(0.98);
+            filter: blur(4px);
+            transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), filter 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .screen.active { display: block; opacity: 1; transform: translateY(0); }
+        .screen.active { display: block; opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
 
         .glass-panel {
             background: var(--card-bg);
@@ -117,7 +118,7 @@
         }
 
         .btn-primary:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0, 255, 128, 0.55); }
-        .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+        .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
 
         .btn-secondary {
             background: rgba(255, 255, 255, 0.05);
@@ -163,43 +164,58 @@
         #custom-toast.show { bottom: 35px; }
         #custom-toast i { color: var(--primary-green); font-size: 1.3rem; }
 
-        .scrollable-content { max-height: 400px; overflow-y: auto; text-align: right; padding-left: 10px; margin-bottom: 20px; }
+        .scrollable-content { max-height: 440px; overflow-y: auto; text-align: right; padding-left: 12px; padding-right: 4px; margin-bottom: 20px; scroll-behavior: smooth; }
         .scrollable-content::-webkit-scrollbar { width: 6px; }
         .scrollable-content::-webkit-scrollbar-thumb { background: var(--glass-border); border-radius: 10px; }
 
-        .guide-section { margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px solid var(--glass-border); }
-        .guide-section h3 { color: var(--primary-green); margin-bottom: 10px; font-size: 1.2rem; display: flex; align-items: center; gap: 10px; }
-        .guide-section p { color: var(--text-muted); line-height: 1.7; font-size: 0.98rem; }
+        .guide-step-card {
+            background: rgba(0, 0, 0, 0.35); border: 1px solid var(--glass-border);
+            border-radius: 20px; padding: 24px; margin-bottom: 20px; text-align: right;
+            display: none; animation: fadeInStep 0.4s ease;
+        }
+        .guide-step-card.active { display: block; }
 
-        .roles-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; text-align: right; margin-bottom: 25px; }
-        .role-card {
-            background: rgba(0, 0, 0, 0.3); border: 1px solid var(--glass-border);
+        @keyframes fadeInStep {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .guide-step-card h3 { color: var(--primary-green); margin-bottom: 12px; font-size: 1.3rem; display: flex; align-items: center; gap: 12px; }
+        .guide-step-card p, .guide-step-card li { color: var(--text-muted); line-height: 1.8; font-size: 1rem; }
+        .guide-step-card ul { margin-right: 20px; margin-top: 10px; }
+
+        .roles-detail-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; text-align: right; margin-bottom: 25px; }
+        .role-detail-card {
+            background: rgba(0, 0, 0, 0.4); border: 1px solid var(--glass-border);
             border-radius: 20px; padding: 22px; transition: transform 0.3s;
+            display: flex; flex-direction: column; gap: 10px;
         }
-        .role-card:hover { transform: translateY(-5px); border-color: var(--primary-green); }
-        .role-card h4 { color: var(--primary-green); margin-bottom: 8px; font-size: 1.2rem; display: flex; align-items: center; gap: 10px; }
-        .role-card p { color: var(--text-muted); font-size: 0.92rem; line-height: 1.6; margin-bottom: 12px; }
-        .role-meta { font-size: 0.85rem; color: #fff; background: rgba(0,255,128,0.1); padding: 6px 12px; border-radius: 8px; display: inline-block; }
+        .role-detail-card:hover { transform: translateY(-5px); border-color: var(--primary-green); }
+        .role-detail-header { display: flex; align-items: center; gap: 12px; margin-bottom: 5px; }
+        .role-detail-header i { font-size: 2.2rem; }
+        .role-detail-header h4 { font-size: 1.25rem; font-weight: 800; }
+        .role-info-row { font-size: 0.92rem; color: var(--text-muted); line-height: 1.7; border-right: 3px solid var(--primary-green); padding-right: 10px; }
+        .role-info-row b { color: var(--text-main); }
 
-        .room-header-info {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 25px; border-bottom: 1px solid var(--glass-border); padding-bottom: 15px;
+        .pro-role-card {
+            background: linear-gradient(145deg, rgba(12,30,20,0.95), rgba(4,10,7,0.95));
+            border: 2px solid var(--primary-green);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 0 35px rgba(0,255,128,0.25);
+            text-align: center;
+            max-width: 480px;
+            margin: 0 auto;
         }
+        .pro-role-card .card-divider { height: 1px; background: var(--glass-border); margin: 18px 0; }
 
-        .room-content-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; text-align: right; }
-        .players-list-box, .room-settings-box {
-            background: rgba(0, 0, 0, 0.3); padding: 22px; border-radius: 20px; border: 1px solid var(--glass-border);
+        .voting-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .player-vote-card {
+            background: rgba(0,0,0,0.4); border: 1px solid var(--glass-border); border-radius: 16px; padding: 15px; text-align: center;
+            transition: all 0.3s; display: flex; flex-direction: column; align-items: center; gap: 10px;
         }
-        .scrollable-list, .scrollable-container { max-height: 280px; overflow-y: auto; margin-top: 10px; display: flex; flex-direction: column; gap: 10px; }
-        .player-item-row {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 12px 16px; background: rgba(255, 255, 255, 0.03); border-radius: 12px; font-size: 0.98rem;
-            border: 1px solid rgba(255, 255, 255, 0.02);
-        }
-
-        .status-badge { padding: 4px 10px; border-radius: 8px; font-size: 0.8rem; font-weight: bold; }
-        .status-online { background: rgba(0,255,128,0.15); color: var(--primary-green); }
-        .status-offline { background: rgba(255,51,102,0.15); color: var(--danger-red); }
+        .player-vote-card.eliminated { opacity: 0.5; filter: grayscale(100%); }
+        .player-vote-card:hover:not(.eliminated) { border-color: var(--primary-green); transform: translateY(-3px); }
 
         .game-status-bar {
             display: flex; justify-content: space-between; align-items: center;
@@ -214,9 +230,40 @@
             padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;
         }
 
+        .tv-night-mode-box {
+            background: #000;
+            border: 2px solid rgba(0, 255, 128, 0.4);
+            border-radius: 24px;
+            padding: 40px 25px;
+            text-align: center;
+            box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.9), 0 0 30px rgba(0, 255, 128, 0.15);
+            margin: 15px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tv-night-mode-box::before {
+            content: '';
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+            background-size: 100% 4px;
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
+        #cinematic-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: #000; z-index: 99999; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; opacity: 0; pointer-events: none;
+            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        #cinematic-overlay.active { opacity: 1; pointer-events: auto; }
+        .cinematic-title { font-size: 3.5rem; font-weight: 900; color: var(--primary-green); letter-spacing: 2px; text-align: center; }
+        .cinematic-subtitle { font-size: 1.3rem; color: var(--text-muted); margin-top: 15px; text-align: center; }
+
         @media (max-width: 768px) {
-            .room-content-grid { grid-template-columns: 1fr; }
             .glass-panel { padding: 25px 20px; }
+            .cinematic-title { font-size: 2.4rem; }
         }
     </style>
 </head>
@@ -226,204 +273,259 @@
         <div class="glow-orb orb-2"></div>
     </div>
 
+    <!-- طبقة الانتقالات السينمائية -->
+    <div id="cinematic-overlay">
+        <div id="cinematic-icon" style="font-size: 4.5rem; margin-bottom: 20px; color: var(--primary-green);"></div>
+        <div id="cinematic-main-text" class="cinematic-title">SPORT CLUB</div>
+        <div id="cinematic-sub-text" class="cinematic-subtitle">جاري الدخول إلى النادي...</div>
+    </div>
+
     <div class="app-container">
-        <!-- 1. شاشة دليل كيفية اللعب -->
-        <section id="how-to-play-screen" class="screen active">
-            <div class="glass-panel wide-panel">
-                <div class="logo-area" style="margin-bottom: 15px;">
-                    <i class="fa-solid fa-book-open sport-logo-icon" style="font-size: 3rem;"></i>
-                    <h2>كيفية اللعب والدليل الشامل</h2>
-                    <p>دليلك الاحترافي لفهم قواعد واستراتيجيات Sport Mafia 2026</p>
+        <!-- 1. الشاشة الرئيسية -->
+        <section id="home-screen" class="screen active">
+            <div class="hero-card glass-panel">
+                <div class="logo-area">
+                    <i class="fa-solid fa-shield-halved sport-logo-icon"></i>
+                    <h1>SPORT <span>CLUB</span></h1>
+                    <p>أجواء نادي كرة القدم الاحترافي 2026 (Local Offline TV Mode)</p>
                 </div>
-                <div class="scrollable-content">
-                    <div class="guide-section">
-                        <h3><i class="fa-solid fa-circle-info"></i> ما هي اللعبة؟</h3>
-                        <p>لعبة تكتيكية جماعية مستوحاة من ألعاب الخداع والتحقيق (Mafia) ولكن بطابع رياضي عصري متطور ومزامنة سحابية كاملة.</p>
-                    </div>
-                    <div class="guide-section">
-                        <h3><i class="fa-solid fa-bullseye"></i> هدف اللعبة وفريق الفوز</h3>
-                        <p><b>المدنيون:</b> كشف وتصويت لإقصاء المخربين.<br><b>المخربون:</b> تخريب الفريق وتصفيته ليلاً حتى يتساوى العدد.</p>
-                    </div>
+                <div class="menu-buttons">
+                    <button class="btn-primary" onclick="checkGuideBeforeGame()">
+                        <i class="fa-solid fa-play"></i> Enter Game (دخول المعسكر)
+                    </button>
+                    <button class="btn-secondary" onclick="openInteractiveGuide()">
+                        <i class="fa-solid fa-book-open"></i> دليل معسكر النادي (إلزامي)
+                    </button>
+                    <button class="btn-secondary" onclick="showScreen('roles-info-screen')">
+                        <i class="fa-solid fa-id-badge"></i> أدوار النادي والتفاصيل
+                    </button>
+                    <button class="btn-secondary" onclick="showScreen('settings-audio-screen')">
+                        <i class="fa-solid fa-volume-high"></i> إعدادات الصوت والاهتزاز
+                    </button>
+                    <button class="btn-text" onclick="showScreen('about-screen')">
+                        <i class="fa-solid fa-circle-info"></i> حول اللعبة
+                    </button>
                 </div>
-                <button class="btn-primary" onclick="showScreen('roles-info-screen')" style="width: 100%;">التالي: استعراض الأدوار الاحترافية <i class="fa-solid fa-arrow-left"></i></button>
             </div>
         </section>
 
-        <!-- 2. شاشة الأدوار -->
+        <!-- 2. شاشة دليل معسكر النادي -->
+        <section id="how-to-play-screen" class="screen">
+            <div class="glass-panel wide-panel">
+                <div class="logo-area" style="margin-bottom: 15px;">
+                    <i class="fa-solid fa-book-open sport-logo-icon" style="font-size: 3rem;"></i>
+                    <h2>دليل معسكر النادي التعليمي</h2>
+                    <p>تعرف على قواعد المعسكر الرياضي ونظام اللعب لتكون مستعداً للموسم</p>
+                </div>
+
+                <div class="scrollable-content" style="max-height: 380px;">
+                    <div class="guide-step-card active" data-step="1">
+                        <h3><i class="fa-solid fa-house-laptop"></i> 1. فكرة معسكر النادي</h3>
+                        <p>مرحباً بك في أروقة نادي كرة القدم. ينقسم أفراد النادي سراً إلى فريقين: الأطقم الرسمية المخلصة (المدير الفني، اللاعبون، الطبيب، الكشاف) ومخرب خفي يسعى لتعطيل مسيرة النادي وإصابة نجومه.</p>
+                    </div>
+
+                    <div class="guide-step-card" data-step="2">
+                        <h3><i class="fa-solid fa-tv"></i> 2. خصوصية المعسكر (TV Mode)</h3>
+                        <p>تعتمد اللعبة على جهاز محلي واحد يُمرر بحذر شديد بين اللاعبين في الغرفة باستخدام شاشات سوداء وتنبيهات صارمة لمنع كشف الهويات.</p>
+                    </div>
+
+                    <div class="guide-step-card" data-step="3">
+                        <h3><i class="fa-solid fa-mobile-screen-button"></i> 3. طريقة تمرير الهاتف الآمنة</h3>
+                        <p>عندما يطلب منك استلام الدور، تأكد أنك وحدك تمسك الهاتف، وبعد تفقد مهامك الليلية أو بطاقتك، أغلق الشاشة وأعد الجهاز لمنتصف الطاولة.</p>
+                    </div>
+
+                    <div class="guide-step-card" data-step="4">
+                        <h3><i class="fa-solid fa-moon"></i> 4. مرحلة الليل في النادي</h3>
+                        <p>يحل الظلام ويبدأ التحرك السري: المخرب يختار لاعباً لإصابته، الطبيب يعالجه، الكشاف يكشف هوية المخرب، والمدير الفني يقرر التكتيك الخاص.</p>
+                    </div>
+
+                    <div class="guide-step-card" data-step="5">
+                        <h3><i class="fa-solid fa-sun"></i> 5. مرحلة النهار والتحقيق</h3>
+                        <p>تستيقظ إدارة النادي صباحاً لمناقشة السؤال الأهم: <b>"من سبب إصابة اللاعب؟"</b> قبل الانتقال للتصويت السري لإبعاد المشتبه به.</p>
+                    </div>
+
+                    <div class="guide-step-card" data-step="6">
+                        <h3><i class="fa-solid fa-trophy"></i> 6. شروط الفوز</h3>
+                        <p>يفوز النادي بكشف وإبعاد المخرب، بينما يفوز المخرب إذا تمكن من تعطيل نجوم الفريق والسيطرة العددية.</p>
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; gap: 10px;">
+                    <button class="btn-secondary" id="guide-prev-btn" onclick="changeGuideStep(-1)" disabled><i class="fa-solid fa-arrow-right"></i> السابق</button>
+                    <span id="guide-step-indicator" style="color: var(--text-muted); font-weight: 700;">الخطوة 1 من 6</span>
+                    <button class="btn-primary" id="guide-next-btn" onclick="changeGuideStep(1)">التالي <i class="fa-solid fa-arrow-left"></i></button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. شاشة أدوار النادي والتفاصيل -->
         <section id="roles-info-screen" class="screen">
             <div class="glass-panel wide-panel">
                 <div class="logo-area" style="margin-bottom: 15px;">
                     <i class="fa-solid fa-id-badge sport-logo-icon" style="font-size: 3rem;"></i>
-                    <h2>أدوار المعركة الرياضية</h2>
-                    <p>تعرف على صلاحيات وأهداف كل دور تكتيكي في اللعبة</p>
+                    <h2>دليل أدوار النادي الرسمية</h2>
+                    <p>تعرف على تفاصيل كل دور تكتيكي داخل النادي</p>
                 </div>
                 <div class="scrollable-content">
-                    <div class="roles-grid">
-                        <div class="role-card">
-                            <h4><i class="fa-solid fa-user-secret" style="color:var(--danger-red);"></i> المخرب (Mafia)</h4>
-                            <p>يستيقظ ليلاً لاختيار ضحيته الرياضية.</p>
-                            <span class="role-meta">فريق الشر | قدرة ليلية</span>
-                        </div>
-                        <div class="role-card">
-                            <h4><i class="fa-solid fa-user-doctor" style="color:var(--primary-green);"></i> المعالج الطبي</h4>
-                            <p>يحمي لاعبًا واحدًا كل ليلة من خطر الاستبعاد.</p>
-                            <span class="role-meta">فريق الخير | قدرة ليلية</span>
-                        </div>
-                        <div class="role-card">
-                            <h4><i class="fa-solid fa-magnifying-glass-chart" style="color:var(--warning-yellow);"></i> الكشاف التقني</h4>
-                            <p>يفحص هوية لاعب كل ليلة.</p>
-                            <span class="role-meta">فريق الخير | قدرة ليلية</span>
-                        </div>
-                        <div class="role-card">
-                            <h4><i class="fa-solid fa-users" style="color:#00bfff;"></i> اللاعب الأساسي</h4>
-                            <p>يشارك في النقاشات ويصوت لكشف المخططين.</p>
-                            <span class="role-meta">فريق الخير | تصويت نهاري</span>
-                        </div>
-                    </div>
-                </div>
-                <div style="display: flex; gap: 15px;">
-                    <button class="btn-secondary" onclick="showScreen('how-to-play-screen')" style="flex: 1;"><i class="fa-solid fa-arrow-right"></i> رجوع</button>
-                    <button class="btn-primary" onclick="showScreen('home-screen')" style="flex: 2;">بدء اللعب والدخول للقائمة <i class="fa-solid fa-gamepad"></i></button>
-                </div>
-            </div>
-        </section>
-
-        <!-- 3. القائمة الرئيسية -->
-        <section id="home-screen" class="screen">
-            <div class="hero-card glass-panel">
-                <div class="logo-area">
-                    <i class="fa-solid fa-shield-halved sport-logo-icon"></i>
-                    <h1>SPORT <span>MAFIA</span></h1>
-                    <p>النسخة التكتيكية الرياضية المطورة 2026</p>
-                </div>
-                <div class="menu-buttons">
-                    <button class="btn-primary" onclick="showScreen('online-menu-screen')">
-                        <i class="fa-solid fa-globe"></i> نمط الأونلاين (Online Mode)
-                    </button>
-                    <button class="btn-secondary" onclick="showScreen('tv-menu-screen')">
-                        <i class="fa-solid fa-tv"></i> نمط التلفزيون والجهاز الواحد (TV Mode)
-                    </button>
-                    <button class="btn-text" onclick="showScreen('how-to-play-screen')">
-                        <i class="fa-solid fa-book"></i> مراجعة الدليل والأدوار
-                    </button>
-                </div>
-            </div>
-        </section>
-
-        <!-- 4. قائمة الأونلاين -->
-        <section id="online-menu-screen" class="screen">
-            <div class="glass-panel">
-                <h2><i class="fa-solid fa-globe"></i> نمط الأونلاين</h2>
-                <div class="menu-buttons" style="margin-top: 30px;">
-                    <button class="btn-primary" onclick="showScreen('create-room-screen')">إنشاء غرفة جديدة</button>
-                    <button class="btn-secondary" onclick="showScreen('join-room-screen')">انضمام لغرفة</button>
-                    <button class="btn-text" onclick="showScreen('home-screen')"><i class="fa-solid fa-arrow-right"></i> رجوع</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- 5. إنشاء غرفة -->
-        <section id="create-room-screen" class="screen">
-            <div class="glass-panel">
-                <h2>إنشاء غرفة رياضية</h2>
-                <div class="input-group" style="margin-top: 25px;">
-                    <label>اسم صاحب الغرفة:</label>
-                    <input type="text" id="host-name-input" placeholder="ادخل اسمك..." maxlength="25">
-                </div>
-                <div class="input-group">
-                    <label>رمز الغرفة (من 4 إلى 8 أرقام):</label>
-                    <input type="text" id="create-room-code" placeholder="مثال: 1234" maxlength="8">
-                </div>
-                <button class="btn-primary" id="confirm-create-room" style="width: 100%; margin-top: 10px;">إنشاء ودخول الغرفة</button>
-                <button class="btn-text" onclick="showScreen('online-menu-screen')" style="width: 100%; margin-top: 10px;">رجوع</button>
-            </div>
-        </section>
-
-        <!-- 6. انضمام لغرفة -->
-        <section id="join-room-screen" class="screen">
-            <div class="glass-panel">
-                <h2>الانضمام إلى غرفة</h2>
-                <div class="input-group" style="margin-top: 25px;">
-                    <label>اسم اللاعب:</label>
-                    <input type="text" id="join-name-input" placeholder="ادخل اسمك..." maxlength="25">
-                </div>
-                <div class="input-group">
-                    <label>رمز الغرفة (أرقام):</label>
-                    <input type="text" id="join-room-code" placeholder="أدخل رمز الغرفة..." maxlength="8">
-                </div>
-                <button class="btn-primary" id="confirm-join-room" style="width: 100%; margin-top: 10px;">دخول الغرفة</button>
-                <button class="btn-text" onclick="showScreen('online-menu-screen')" style="width: 100%; margin-top: 10px;">رجوع</button>
-            </div>
-        </section>
-
-        <!-- 7. نمط التلفزيون -->
-        <section id="tv-menu-screen" class="screen">
-            <div class="glass-panel">
-                <h2><i class="fa-solid fa-tv"></i> نمط التلفزيون (جهاز واحد)</h2>
-                <div class="input-group" style="margin-top: 25px;">
-                    <label>عدد اللاعبين (من 4 إلى 15):</label>
-                    <input type="number" id="tv-players-count" min="4" max="15" value="6">
-                </div>
-                <button class="btn-primary" onclick="setupTvPlayersInputs()" style="width: 100%;">التالي: إدخال الأسماء</button>
-                <button class="btn-text" onclick="showScreen('home-screen')" style="width: 100%; margin-top: 10px;">رجوع</button>
-            </div>
-        </section>
-
-        <!-- 8. أسماء لاعبي التلفزيون -->
-        <section id="tv-names-screen" class="screen">
-            <div class="glass-panel">
-                <h2>أسماء اللاعبين</h2>
-                <div id="tv-names-container" class="scrollable-container" style="max-height: 250px; margin: 20px 0;"></div>
-                <button class="btn-primary" onclick="startTvGame()" style="width: 100%;">بدء توزيع الأدوار السرية</button>
-                <button class="btn-text" onclick="showScreen('tv-menu-screen')" style="width: 100%; margin-top: 10px;">رجوع</button>
-            </div>
-        </section>
-
-        <!-- 9. غرفة الانتظار الأونلاين -->
-        <section id="room-waiting-screen" class="screen">
-            <div class="glass-panel wide-panel">
-                <div class="room-header-info">
-                    <h2>غرفة رقم: <span id="display-room-code">----</span></h2>
-                    <button class="btn-sm" onclick="copyRoomCode()"><i class="fa-solid fa-copy"></i> نسخ الرمز</button>
-                </div>
-                <div class="room-content-grid">
-                    <div class="players-list-box">
-                        <h3>اللاعبون المتواجدون (<span id="players-count-num">0</span>)</h3>
-                        <div id="online-players-list" class="scrollable-list"></div>
-                    </div>
-                    <div class="room-settings-box" id="room-settings-container">
-                        <h3>إعدادات اللعبة</h3>
-                        <div class="setting-item" style="margin-top: 15px;">
-                            <label>وقت النقاش (ثواني):</label>
-                            <input type="number" id="setting-discussion" value="45" min="15" max="300">
-                        </div>
-                        <div class="setting-item" style="margin-top: 10px;">
-                            <label>وقت التصويت (ثواني):</label>
-                            <input type="number" id="setting-voting" value="30" min="10" max="120">
-                        </div>
-                        <div id="roles-config-box" style="margin-top: 15px; text-align: right;">
-                            <h4>تفعيل الأدوار:</h4>
-                            <div class="checkbox-group" style="display:flex; flex-direction:column; gap:8px; margin-top:8px;">
-                                <label><input type="checkbox" id="role-saboteur" checked disabled> المخرب (Mafia)</label>
-                                <label><input type="checkbox" id="role-doctor" checked> الطبيب (Doctor)</label>
-                                <label><input type="checkbox" id="role-detective" checked> الكشاف (Detective)</label>
+                    <div class="roles-detail-grid">
+                        <!-- المدير الفني -->
+                        <div class="role-detail-card">
+                            <div class="role-detail-header">
+                                <i class="fa-solid fa-user-tie" style="color:#00bfff;"></i>
+                                <h4 style="color:#00bfff;">🎩 المدير الفني</h4>
                             </div>
+                            <div class="role-info-row"><b>الفريق:</b> النادي (الخير).</div>
+                            <div class="role-info-row"><b>المهارة الليلية:</b> يقرر تكتيكاً خاصاً للفريق كل ليلة.</div>
+                            <div class="role-info-row"><b>الهدف:</b> قيادة النادي بحكمة وحماية استقرار الفريق.</div>
                         </div>
-                        <button class="btn-primary" id="start-online-game-btn" style="width: 100%; margin-top: 20px;">بدء المعركة الرياضية</button>
+
+                        <!-- المهاجم -->
+                        <div class="role-detail-card">
+                            <div class="role-detail-header">
+                                <i class="fa-solid fa-futbol" style="color:var(--primary-green);"></i>
+                                <h4 style="color:var(--primary-green);">⚽ المهاجم</h4>
+                            </div>
+                            <div class="role-info-row"><b>الفريق:</b> النادي (الخير).</div>
+                            <div class="role-info-row"><b>المهارة:</b> نجم هجوم النادي، يشارك بقوة في النقاش والتصويت النهاري.</div>
+                            <div class="role-info-row"><b>الهدف:</b> حماية الفريق وطرد المخربين.</div>
+                        </div>
+
+                        <!-- الحارس -->
+                        <div class="role-detail-card">
+                            <div class="role-detail-header">
+                                <i class="fa-solid fa-hand-fist" style="color:var(--warning-yellow);"></i>
+                                <h4 style="color:var(--warning-yellow);">🧤 الحارس</h4>
+                            </div>
+                            <div class="role-info-row"><b>الفريق:</b> النادي (الخير).</div>
+                            <div class="role-info-row"><b>المهارة:</b> صمام الأمان لعرين النادي والتصدي للتحديات.</div>
+                            <div class="role-info-row"><b>الهدف:</b> الحفاظ على نظافة شباك الفريق وتحليل الشبهات.</div>
+                        </div>
+
+                        <!-- طبيب الفريق -->
+                        <div class="role-detail-card">
+                            <div class="role-detail-header">
+                                <i class="fa-solid fa-user-doctor" style="color:var(--primary-green);"></i>
+                                <h4 style="color:var(--primary-green);">🩺 طبيب الفريق</h4>
+                            </div>
+                            <div class="role-info-row"><b>الفريق:</b> النادي (الخير).</div>
+                            <div class="role-info-row"><b>المهارة الليلية:</b> يعالج اللاعب الذي تعرض للإصابة.</div>
+                            <div class="role-info-row"><b>ملاحظة:</b> لا يمكنه علاج نفسه أكثر من مرة، ولا علاج نفس اللاعب ليلتين متتاليتين.</div>
+                        </div>
+
+                        <!-- الكشاف -->
+                        <div class="role-detail-card">
+                            <div class="role-detail-header">
+                                <i class="fa-solid fa-binoculars" style="color:var(--warning-yellow);"></i>
+                                <h4 style="color:var(--warning-yellow);">🕵️ الكشاف</h4>
+                            </div>
+                            <div class="role-info-row"><b>الفريق:</b> النادي (الخير).</div>
+                            <div class="role-info-row"><b>المهارة الليلية:</b> يكتشف المخرب ويحصل على النتيجة سراً.</div>
+                            <div class="role-info-row"><b>الهدف:</b> فضح هوية المخرب بحجج دامغة نهاراً.</div>
+                        </div>
+
+                        <!-- المخرب -->
+                        <div class="role-detail-card">
+                            <div class="role-detail-header">
+                                <i class="fa-solid fa-bomb" style="color:var(--danger-red);"></i>
+                                <h4 style="color(--danger-red);">💣 المخرب</h4>
+                            </div>
+                            <div class="role-info-row"><b>الفريق:</b> المعسكر المعارض (الشر).</div>
+                            <div class="role-info-row"><b>المهارة الليلية:</b> يختار لاعباً "ليصاب" ويغيب عن الفريق.</div>
+                            <div class="role-info-row"><b>الهدف:</b> تعطيل مسيرة النادي والسيطرة الكاملة.</div>
+                        </div>
                     </div>
                 </div>
-                <button class="btn-danger" onclick="leaveRoom()" style="margin-top: 20px;"><i class="fa-solid fa-right-from-bracket"></i> مغادرة الغرفة</button>
+                <button class="btn-primary" onclick="showScreen('home-screen')" style="width: 100%;">العودة للقائمة الرئيسية <i class="fa-solid fa-arrow-left"></i></button>
             </div>
         </section>
 
-        <!-- 10. شاشة اللعب التفاعلية -->
-        <section id="game-play-screen" class="screen">
+        <!-- 4. شاشة إعدادات الصوت والاهتزاز -->
+        <section id="settings-audio-screen" class="screen">
+            <div class="glass-panel wide-panel">
+                <h2><i class="fa-solid fa-volume-high"></i> إعدادات الصوت والاهتزاز والتعليق الصوتي</h2>
+                <div class="scrollable-content" style="margin-top: 20px; text-align: right;">
+                    <div class="action-card">
+                        <span>تشغيل المؤثرات الصوتية والموسيقى</span>
+                        <button class="btn-sm" id="toggle-sound-btn" onclick="toggleSoundSetting()">مفعل (تشغيل)</button>
+                    </div>
+                    <div class="action-card">
+                        <span>تشغيل الاهتزاز (Vibration)</span>
+                        <button class="btn-sm" id="toggle-vibe-btn" onclick="toggleVibrationSetting()">مفعل (تشغيل)</button>
+                    </div>
+                    <div class="action-card">
+                        <span>التعليق الصوتي الآلي (Text-to-Speech)</span>
+                        <button class="btn-sm" id="toggle-tts-btn" onclick="toggleTtsSetting()">مفعل (تشغيل)</button>
+                    </div>
+                </div>
+                <button class="btn-primary" onclick="showScreen('home-screen')" style="width: 100%;">حفظ والعودة للقائمة الرئيسية</button>
+            </div>
+        </section>
+
+        <!-- 5. شاشة إعدادات المعسكر المحلي -->
+        <section id="settings-screen" class="screen">
+            <div class="glass-panel wide-panel">
+                <h2><i class="fa-solid fa-gear"></i> إعدادات معسكر النادي (Local Offline)</h2>
+                <div class="scrollable-content" style="margin-top: 20px;">
+                    <div class="input-group">
+                        <label>عدد اللاعبين (من 5 إلى 15):</label>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="number" id="players-count-input" min="5" max="15" value="6" style="flex: 1;">
+                            <button class="btn-secondary" onclick="generatePlayerNameInputs()">تحديث القائمة</button>
+                        </div>
+                    </div>
+                    <div id="player-names-container" class="scrollable-container" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;"></div>
+                    
+                    <div class="input-group">
+                        <label>مدة النقاش النهاري (ثواني):</label>
+                        <input type="number" id="setting-discussion-time" min="15" max="300" value="45">
+                    </div>
+                </div>
+                <div style="display: flex; gap: 15px; margin-top: 15px;">
+                    <button class="btn-secondary" onclick="showScreen('home-screen')" style="flex: 1;"><i class="fa-solid fa-arrow-right"></i> رجوع</button>
+                    <button class="btn-primary" onclick="startLocalGame()" style="flex: 2;">ابدأ معسكر النادي <i class="fa-solid fa-futbol"></i></button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. شاشة توزيع الأدوار الفردية (Pass Phone Mode) -->
+        <section id="pass-phone-screen" class="screen">
+            <div class="glass-panel">
+                <i class="fa-solid fa-mobile-screen-button sport-logo-icon" style="font-size: 3.5rem;"></i>
+                <h2>مرر الهاتف إلى</h2>
+                <div id="pass-to-player-name" style="font-size: 2.5rem; font-weight: 900; color: var(--primary-green); margin: 15px 0;">اسم اللاعب</div>
+                <div style="font-size: 1.5rem; color: var(--warning-yellow); margin-bottom: 20px;">↓</div>
+                <p style="color: var(--text-muted); margin-bottom: 25px; font-weight: 700;">تأكد أن اللاعب المذكور حصرياً هو من يمسك الهاتف لاستلام دوره الرياضي.</p>
+                <button class="btn-primary" onclick="showRoleCard()" style="width: 100%;">اكشف الدور (معسكر مغلق)</button>
+            </div>
+        </section>
+
+        <!-- 7. شاشة عرض الدور السري -->
+        <section id="reveal-role-screen" class="screen">
+            <div class="glass-panel" style="padding: 20px;">
+                <div id="role-reveal-content" style="margin-bottom: 25px;"></div>
+                <button class="btn-primary" onclick="hideRoleAndPass()" style="width: 100%;">تم الحفظ، إخفاء وتمرير الجهاز</button>
+            </div>
+        </section>
+
+        <!-- 8. شاشة اللعب التفاعلية الرئيسية -->
+        <section id="gameplay-screen" class="screen">
             <div class="glass-panel wide-panel text-center">
                 <div class="game-status-bar">
                     <span id="game-phase-title" class="phase-badge">المرحلة: الاستعداد</span>
                     <span id="game-timer" class="timer-badge"><i class="fa-solid fa-clock"></i> 00:00</span>
                 </div>
-                <div id="game-main-content" class="game-content-area" style="min-height: 280px; display: flex; flex-direction: column; justify-content: center; align-items: center;"></div>
+                <div id="game-main-content" class="game-content-area" style="min-height: 320px; display: flex; flex-direction: column; justify-content: center; align-items: center;"></div>
+            </div>
+        </section>
+
+        <!-- 9. شاشة حول اللعبة -->
+        <section id="about-screen" class="screen">
+            <div class="glass-panel">
+                <h2><i class="fa-solid fa-circle-info"></i> حول اللعبة</h2>
+                <p style="color: var(--text-muted); line-height: 1.8; margin: 20px 0;">
+                    Sport Club 2026 هي النسخة الرياضية المخصصة لأجواء أندية كرة القدم (Local Offline TV Mode). تجمع بين حماس التكتيك، أدوار المدير الفني، اللاعبين، الطبيب، الكشاف، والمخرب، في تجربة سرية بالكامل ومحاكاة حقيقية لمعسكر الفريق.
+                </p>
+                <button class="btn-primary" onclick="showScreen('home-screen')" style="width: 100%;">العودة للقائمة الرئيسية</button>
             </div>
         </section>
     </div>
@@ -434,44 +536,125 @@
         <span id="toast-message">رسالة التنبيه</span>
     </div>
 
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-
-    <!-- محرك اللعبة ونظام المزامنة المتكامل والآمن (Production Ready Architecture) -->
+    <!-- محرك اللعبة المحلي -->
     <script>
-        const firebaseConfig = {
-  apiKey: "AIzaSyD85llh91hmamQPPDc_HorXVYPnh2Gl6ng",
-  authDomain: "kickoff-platform-76cdc.firebaseapp.com",
-  databaseURL: "https://kickoff-platform-76cdc-default-rtdb.firebaseio.com",
-  projectId: "kickoff-platform-76cdc",
-  storageBucket: "kickoff-platform-76cdc.firebasestorage.app",
-  messagingSenderId: "889640653089",
-  appId: "1:889640653089:web:0b8b8520965e39fd7aae60",
-  measurementId: "G-1ZNYQJ1TPK"
-};
-        firebase.initializeApp(firebaseConfig);
-        const rdb = firebase.database();
-        let currentUser = null;
+        let audioSettings = {
+            soundEnabled: true,
+            vibeEnabled: true,
+            ttsEnabled: true
+        };
 
-        // المصادقة الآمنة بخاصية المجهول مع معالجة الأخطاء ومنع الأعطال (Crash Prevention)
-        firebase.auth().signInAnonymously().then((userCredential) => {
-            currentUser = userCredential.user;
-            const savedRoom = localStorage.getItem('sport_mafia_active_room');
-            const savedName = localStorage.getItem('sport_mafia_player_name');
-            if (savedRoom && savedName) {
-                setTimeout(() => {
-                    attemptReconnect(savedRoom, savedName);
-                }, 1000);
+        function toggleSoundSetting() {
+            audioSettings.soundEnabled = !audioSettings.soundEnabled;
+            const btn = document.getElementById('toggle-sound-btn');
+            if (btn) btn.textContent = audioSettings.soundEnabled ? 'مفعل (تشغيل)' : 'معطل (إيقاف)';
+            showToast(audioSettings.soundEnabled ? 'تم تفعيل المؤثرات الصوتية' : 'تم إيقاف المؤثرات الصوتية');
+        }
+
+        function toggleVibrationSetting() {
+            audioSettings.vibeEnabled = !audioSettings.vibeEnabled;
+            const btn = document.getElementById('toggle-vibe-btn');
+            if (btn) btn.textContent = audioSettings.vibeEnabled ? 'مفعل (تشغيل)' : 'معطل (إيقاف)';
+            showToast(audioSettings.vibeEnabled ? 'تم تفعيل الاهتزاز' : 'تم إيقاف الاهتزاز');
+        }
+
+        function toggleTtsSetting() {
+            audioSettings.ttsEnabled = !audioSettings.ttsEnabled;
+            const btn = document.getElementById('toggle-tts-btn');
+            if (btn) btn.textContent = audioSettings.ttsEnabled ? 'مفعل (تشغيل)' : 'معطل (إيقاف)';
+            showToast(audioSettings.ttsEnabled ? 'تم تفعيل التعليق الصوتي' : 'تم إيقاف التعليق الصوتي');
+        }
+
+        function triggerVibration(pattern = [200, 100, 200]) {
+            if (audioSettings.vibeEnabled && window.navigator && window.navigator.vibrate) {
+                try { window.navigator.vibrate(pattern); } catch(e) {}
             }
-        }).catch((error) => {
-            console.error("Auth Error:", error);
-            showToast("فشل الاتصال بالمصادقة الآمنة.", "error");
-        });
+        }
 
-        // إدارة تنقل الشاشات مع الحفاظ الفعلي على التصميم والهوية البصرية بنسبة 100%
+        const SoundFX = {
+            ctx: null,
+            init() {
+                if (!this.ctx) {
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    if (AudioContext) this.ctx = new AudioContext();
+                }
+                if (this.ctx && this.ctx.state === 'suspended') {
+                    this.ctx.resume();
+                }
+            },
+            playClick() {
+                if (!audioSettings.soundEnabled) return;
+                this.init();
+                if (!this.ctx) return;
+                let osc = this.ctx.createOscillator();
+                let gain = this.ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(600, this.ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(300, this.ctx.currentTime + 0.08);
+                gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.08);
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.08);
+            },
+            playNightStart() {
+                if (!audioSettings.soundEnabled) return;
+                this.init();
+                if (!this.ctx) return;
+                let osc = this.ctx.createOscillator();
+                let gain = this.ctx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(220, this.ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(80, this.ctx.currentTime + 0.8);
+                gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.8);
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.8);
+            },
+            playSunrise() {
+                if (!audioSettings.soundEnabled) return;
+                this.init();
+                if (!this.ctx) return;
+                let osc = this.ctx.createOscillator();
+                let gain = this.ctx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(300, this.ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(660, this.ctx.currentTime + 0.6);
+                gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.6);
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.6);
+            },
+            playWin() {
+                if (!audioSettings.soundEnabled) return;
+                this.init();
+                if (!this.ctx) return;
+                let now = this.ctx.currentTime;
+                [440, 554, 659, 880].forEach((freq, idx) => {
+                    let osc = this.ctx.createOscillator();
+                    let gain = this.ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, now + (idx * 0.15));
+                    gain.gain.setValueAtTime(0.25, now + (idx * 0.15));
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + (idx * 0.15) + 0.3);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start(now + (idx * 0.15));
+                    osc.stop(now + (idx * 0.15) + 0.3);
+                });
+            }
+        };
+
+        function speakText(text) {
+    return;
+}
         function showScreen(screenId) {
+            SoundFX.playClick();
             document.querySelectorAll('.screen').forEach(screen => {
                 screen.classList.remove('active');
             });
@@ -480,6 +663,21 @@
                 target.classList.add('active');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
+        }
+
+        function triggerCinematicTransition(targetScreenId, titleText, iconClass) {
+            const overlay = document.getElementById('cinematic-overlay');
+            const titleEl = document.getElementById('cinematic-main-text');
+            const iconEl = document.getElementById('cinematic-icon');
+
+            if (titleEl) titleEl.textContent = titleText;
+            if (iconEl) iconEl.className = iconClass;
+
+            overlay.classList.add('active');
+            setTimeout(() => {
+                showScreen(targetScreenId);
+                overlay.classList.remove('active');
+            }, 1200);
         }
 
         function showToast(message, type = 'info') {
@@ -502,56 +700,108 @@
             setTimeout(() => { toast.classList.remove('show'); }, 3800);
         }
 
-        function copyRoomCode() {
-            const codeEl = document.getElementById('display-room-code');
-            if (!codeEl) return;
-            const code = codeEl.textContent;
-            navigator.clipboard.writeText(code).then(() => {
-                showToast('تم نسخ رمز الغرفة بنجاح!');
-            }).catch(() => {
-                showToast('تعذر النسخ تلقائياً.', 'error');
-            });
+        let hasCompletedGuide = false;
+        let currentGuideStep = 1;
+        const totalGuideSteps = 6;
+
+        function openInteractiveGuide() {
+            currentGuideStep = 1;
+            updateGuideStepView();
+            showScreen('how-to-play-screen');
         }
 
-        /* --- 🧩 نظام الأدوار القابل للتوسعة (Plugin-Based Roles Registry) --- */
+        function checkGuideBeforeGame() {
+            if (!hasCompletedGuide) {
+                showToast('عذراً، يجب عليك قراءة دليل المعسكر كاملاً قبل البدء.', 'error');
+                openInteractiveGuide();
+                return;
+            }
+            showScreen('settings-screen');
+        }
+
+        function updateGuideStepView() {
+            document.querySelectorAll('.guide-step-card').forEach(card => {
+                card.classList.remove('active');
+                if (parseInt(card.getAttribute('data-step')) === currentGuideStep) {
+                    card.classList.add('active');
+                }
+            });
+
+            const prevBtn = document.getElementById('guide-prev-btn');
+            const nextBtn = document.getElementById('guide-next-btn');
+            const indicator = document.getElementById('guide-step-indicator');
+
+            if (prevBtn) prevBtn.disabled = currentGuideStep === 1;
+            if (indicator) indicator.textContent = `الخطوة ${currentGuideStep} من ${totalGuideSteps}`;
+
+            if (nextBtn) {
+                if (currentGuideStep === totalGuideSteps) {
+                    nextBtn.innerHTML = 'فهمت التعليمات، ابدأ <i class="fa-solid fa-check"></i>';
+                } else {
+                    nextBtn.innerHTML = 'التالي <i class="fa-solid fa-arrow-left"></i>';
+                }
+            }
+        }
+
+        function changeGuideStep(direction) {
+            currentGuideStep += direction;
+            if (currentGuideStep > totalGuideSteps) {
+                hasCompletedGuide = true;
+                showToast('ممتاز! تم إتمام دليل المعسكر بنجاح.', 'success');
+                showScreen('settings-screen');
+                return;
+            }
+            if (currentGuideStep < 1) currentGuideStep = 1;
+            updateGuideStepView();
+        }
+
+        function generatePlayerNameInputs() {
+            const countInput = document.getElementById('players-count-input');
+            if (!countInput) return;
+            let count = parseInt(countInput.value) || 6;
+            if (count < 5) count = 5;
+            if (count > 15) count = 15;
+            countInput.value = count;
+
+            const container = document.getElementById('player-names-container');
+            if (!container) return;
+            container.innerHTML = '';
+            for (let i = 1; i <= count; i++) {
+                container.innerHTML += `
+                    <div class="input-group" style="margin-bottom: 10px;">
+                        <label>اسم اللاعب رقم ${i}:</label>
+                        <input type="text" class="local-player-name-input" value="لاعب ${i}" maxlength="20">
+                    </div>
+                `;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            generatePlayerNameInputs();
+        });
+
+        let gameSession = {
+            players: [],
+            currentIndex: 0,
+            phase: 'distribution',
+            round: 1,
+            nightActions: { saboteur: null, doctor: null, scout: null, manager: null },
+            doctorLastTarget: null,
+            doctorSelfHealCount: 0,
+            votes: {},
+            timerInterval: null
+        };
+
         const RolesRegistry = {
             roles: {
-                saboteur: { 
-                    id: 'saboteur', 
-                    name: 'المخرب (Mafia)', 
-                    team: 'evil', 
-                    priority: 2, 
-                    nightAction: true, 
-                    description: 'هدفك تعطيل الفريق سراً وإزالة اللاعبين ليلاً.' 
-                },
-                doctor: { 
-                    id: 'doctor', 
-                    name: 'المعالج الطبي (Doctor)', 
-                    team: 'good', 
-                    priority: 1, 
-                    nightAction: true, 
-                    description: 'تستطيع حماية لاعب واحد كل ليلة من خطر الاستبعاد.' 
-                },
-                detective: { 
-                    id: 'detective', 
-                    name: 'الكشاف التقني (Detective)', 
-                    team: 'good', 
-                    priority: 3, 
-                    nightAction: true, 
-                    description: 'تستطيع كشف الهوية الحقيقية لأحد اللاعبين كل ليلة.' 
-                },
-                player: { 
-                    id: 'player', 
-                    name: 'لاعب أساسي', 
-                    team: 'good', 
-                    priority: 4, 
-                    nightAction: false, 
-                    description: 'شارك في النقاشات واكتشف المخربين عبر التصويت.' 
-                }
+                manager: { name: 'المدير الفني', team: 'good', description: 'يقرر تكتيكاً خاصاً للفريق.', ability: 'وضع خطط واختيار استراتيجيات النادي.', win: 'حماية النادي وإبعاد المخرب.', icon: 'fa-user-tie', color: '#00bfff' },
+                striker: { name: 'المهاجم', team: 'good', description: 'نجومية الهجوم والمشاركة الفعالة في النقاش.', ability: 'التصويت وحماية النادي.', win: 'حماية النادي وإبعاد المخرب.', icon: 'fa-futbol', color: 'var(--primary-green)' },
+                goalkeeper: { name: 'الحارس', team: 'good', description: 'حراسة شباك النادي والدفاع عن زملائه.', ability: 'التصدي للتحديات وكشف الحقائق.', win: 'حماية النادي وإبعاد المخرب.', icon: 'fa-hand-fist', color: 'var(--warning-yellow)' },
+                doctor: { name: 'طبيب الفريق', team: 'good', description: 'علاج اللاعب المصاب كل ليلة.', ability: 'إسعاف ومعالجة اللاعبين (مع قيود الحماية).', win: 'حماية النادي وإبعاد المخرب.', icon: 'fa-user-doctor', color: 'var(--primary-green)' },
+                scout: { name: 'الكشاف', team: 'good', description: 'اكتشاف هوية المخرب سراً.', ability: 'فحص هوية أي لاعب كل ليلة.', win: 'كشف المخرب وفضح أمره.', icon: 'fa-binoculars', color: 'var(--warning-yellow)' },
+                saboteur: { name: 'المخرب', team: 'evil', description: 'تعطيل النادي وإصابة اللاعبين.', ability: 'اختيار لاعب "ليصاب" كل ليلة.', win: 'السيطرة وتعطيل نجوم النادي.', icon: 'fa-bomb', color: 'var(--danger-red)' }
             },
-            
-            // خوارزمية Fisher-Yates Shuffle الحقيقية لتوزيع عشوائي بحت وغير متحيز
-            fisherYatesShuffle(array) {
+            shuffle(array) {
                 let currentIndex = array.length, randomIndex;
                 while (currentIndex !== 0) {
                     randomIndex = Math.floor(Math.random() * currentIndex);
@@ -560,759 +810,554 @@
                 }
                 return array;
             },
-
-            assignRoles(playersList, config) {
-                let pool = ['saboteur'];
-                if (playersList.length >= 6) {
-                    pool.push('saboteur'); // دعم أكثر من مافيا للأعداد الكبيرة
-                }
-                if (config.doctor) pool.push('doctor');
-                if (config.detective) pool.push('detective');
-                
+            assignRoles(playersList) {
+                let pool = ['saboteur', 'doctor', 'scout', 'manager'];
+                // إضافة مهاجم أو حارس حسب عدد اللاعبين
                 while (pool.length < playersList.length) {
-                    pool.push('player');
+                    if (pool.length % 2 === 0) pool.push('striker');
+                    else pool.push('goalkeeper');
                 }
-                
-                this.fisherYatesShuffle(pool);
-
-                let map = {};
-                playersList.forEach((p, idx) => { 
-                    map[p.id] = pool[idx]; 
+                this.shuffle(pool);
+                playersList.forEach((p, idx) => {
+                    p.role = pool[idx];
+                    p.isAlive = true;
                 });
-                return map;
             }
         };
 
-        /* --- TV Mode Engine (محرك اللعبة للجهاز الواحد) --- */
-        let tvGameData = { players: [], currentIndex: 0, assignedRoles: {} };
+        function startLocalGame() {
+            let playersList = [];
+            document.querySelectorAll('.local-player-name-input').forEach((input, idx) => {
+                let val = input.value.trim();
+                playersList.push({
+                    id: 'p_' + idx,
+                    name: val !== '' ? val : `لاعب ${idx + 1}`,
+                    role: 'player',
+                    isAlive: true
+                });
+            });
 
-        function setupTvPlayersInputs() {
-            const countInput = document.getElementById('tv-players-count');
-            if (!countInput) return;
-            const count = parseInt(countInput.value) || 6;
-            const container = document.getElementById('tv-names-container');
-            if (!container) return;
-            container.innerHTML = '';
-            for (let i = 1; i <= count; i++) {
-                container.innerHTML += `
-                    <div class="input-group">
-                        <label>اسم اللاعب رقم ${i}:</label>
-                        <input type="text" class="tv-player-name-input" value="لاعب ${i}" maxlength="20">
+            if (playersList.length < 5) {
+                showToast('يجب أن يكون عدد اللاعبين 5 على الأقل.', 'error');
+                return;
+            }
+
+            RolesRegistry.assignRoles(playersList);
+
+            gameSession.players = playersList;
+            gameSession.currentIndex = 0;
+            gameSession.round = 1;
+            gameSession.phase = 'distribution';
+            gameSession.doctorLastTarget = null;
+            gameSession.doctorSelfHealCount = 0;
+
+            triggerCinematicTransition('pass-phone-screen', 'توزيع الأدوار داخل المعسكر', 'fa-solid fa-id-badge');
+            setTimeout(showPassPhoneScreen, 600);
+        }
+
+        function showPassPhoneScreen() {
+            if (gameSession.currentIndex >= gameSession.players.length) {
+                triggerCinematicTransition('gameplay-screen', '🌙 حل الليل في المعسكر...', 'fa-solid fa-moon');
+                setTimeout(startNightPhase, 1000);
+                return;
+            }
+            const p = gameSession.players[gameSession.currentIndex];
+            const nameEl = document.getElementById('pass-to-player-name');
+            if (nameEl) nameEl.textContent = p.name;
+            showScreen('pass-phone-screen');
+        }
+
+        function showRoleCard() {
+            triggerVibration([100]);
+            const p = gameSession.players[gameSession.currentIndex];
+            const rInfo = RolesRegistry.roles[p.role];
+            const container = document.getElementById('role-reveal-content');
+            if (container) {
+                container.innerHTML = `
+                    <div class="pro-role-card">
+                        <i class="fa-solid ${rInfo.icon}" style="font-size: 3.5rem; color: ${rInfo.color}; margin-bottom: 15px;"></i>
+                        <h2 style="color: ${rInfo.color}; font-size: 1.8rem; margin-bottom: 5px;">${rInfo.name}</h2>
+                        <div style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 10px;">اللاعب: <b>${p.name}</b></div>
+                        <div class="card-divider"></div>
+                        <div style="text-align: right; margin-bottom: 10px;">
+                            <b style="color:var(--primary-green);">المهمة:</b> <span style="color:var(--text-muted);">${rInfo.description}</span>
+                        </div>
+                        <div style="text-align: right; margin-bottom: 10px;">
+                            <b style="color:var(--warning-yellow);">المهارة:</b> <span style="color:var(--text-muted);">${rInfo.ability}</span>
+                        </div>
+                        <div style="text-align: right;">
+                            <b style="color:var(--danger-red);">الفوز:</b> <span style="color:var(--text-muted);">${rInfo.win}</span>
+                        </div>
                     </div>
                 `;
             }
-            showScreen('tv-names-screen');
+            showScreen('reveal-role-screen');
         }
 
-        function startTvGame() {
-            tvGameData.players = [];
-            document.querySelectorAll('.tv-player-name-input').forEach((input, idx) => {
-                const val = input.value.trim();
-                tvGameData.players.push({ id: 'p_' + idx, name: val !== '' ? val : `لاعب ${idx + 1}` });
+        function hideRoleAndPass() {
+            gameSession.currentIndex++;
+            showPassPhoneScreen();
+        }
+
+        let nightStepIndex = 0;
+        const nightRolesOrder = ['saboteur', 'doctor', 'scout', 'manager'];
+
+        function startNightPhase() {
+            SoundFX.playNightStart();
+            triggerVibration([300, 150, 300]);
+            gameSession.phase = 'night';
+            gameSession.nightActions = { saboteur: null, doctor: null, scout: null, manager: null };
+            nightStepIndex = 0;
+            showScreen('gameplay-screen');
+            renderNightTransitionStep();
+        }
+
+        function renderNightTransitionStep() {
+            if (nightStepIndex >= nightRolesOrder.length) {
+                resolveNightPhase();
+                return;
+            }
+            let roleKey = nightRolesOrder[nightStepIndex];
+            let activePlayer = gameSession.players.find(p => p.role === roleKey && p.isAlive);
+
+            const titleEl = document.getElementById('game-phase-title');
+            const mainEl = document.getElementById('game-main-content');
+            if (titleEl) titleEl.textContent = '🌙 مرحلة الليل (سكون المعسكر)';
+
+            if (!activePlayer) {
+                nightStepIndex++;
+                renderNightTransitionStep();
+                return;
+            }
+
+            let promptText = '';
+            let ttsPrompt = '';
+            let rColor = 'var(--primary-green)';
+
+            if (roleKey === 'saboteur') {
+                promptText = 'إذا كنت الشخصية المطلوبة (المخرب) فقط، استلم الهاتف.';
+                ttsPrompt = 'حل الليل. إذا كنت المخرب فقط، استلم الهاتف.';
+                rColor = 'var(--danger-red)';
+            } else if (roleKey === 'doctor') {
+                promptText = 'إذا كنت الشخصية المطلوبة (طبيب الفريق) فقط، استلم الهاتف.';
+                ttsPrompt = 'إذا كنت طبيب الفريق فقط، استلم الهاتف.';
+                rColor = 'var(--primary-green)';
+            } else if (roleKey === 'scout') {
+                promptText = 'إذا كنت الشخصية المطلوبة (الكشاف) فقط، استلم الهاتف.';
+                ttsPrompt = 'إذا كنت الكشاف فقط، استلم الهاتف.';
+                rColor = 'var(--warning-yellow)';
+            } else if (roleKey === 'manager') {
+                promptText = 'إذا كنت الشخصية المطلوبة (المدير الفني) فقط، استلم الهاتف.';
+                ttsPrompt = 'إذا كنت المدير الفني فقط، استلم الهاتف.';
+                rColor = '#00bfff';
+            }
+
+            speakText(ttsPrompt);
+            triggerVibration([150]);
+
+            let html = `
+                <div class="tv-night-mode-box w-100">
+                    <i class="fa-solid fa-moon" style="font-size:3rem; color:${rColor}; margin-bottom:15px; animation: pulseIcon 2s infinite;"></i>
+                    <h3 style="color:${rColor}; font-size:1.4rem; margin-bottom:12px;">أمن معسكر النادي (TV Mode)</h3>
+                    <p style="font-size:1.25rem; font-weight:bold; color:var(--text-main); margin-bottom:20px; line-height:1.6;">${promptText}</p>
+                    <p style="color:var(--text-muted); font-size:0.95rem; margin-bottom:25px;">تأكد أن الجميع مغمضو الأعين، ثم اضغط للمتابعة:</p>
+                    <button class="btn-primary" onclick="openNightTargetSelection('${roleKey}')" style="width:100%;">أنا الشخص المعني، استلم الدور</button>
+                </div>
+            `;
+            if (mainEl) mainEl.innerHTML = html;
+        }
+
+        function openNightTargetSelection(roleKey) {
+            SoundFX.playClick();
+            triggerVibration([100]);
+            let rInfo = RolesRegistry.roles[roleKey];
+            const mainEl = document.getElementById('game-main-content');
+            if (!mainEl) return;
+
+            let instructionSpoken = '';
+            if (roleKey === 'saboteur') instructionSpoken = 'اختر لاعباً ليصاب.';
+            else if (roleKey === 'doctor') instructionSpoken = 'اختر اللاعب لمعالجته.';
+            else if (roleKey === 'scout') instructionSpoken = 'اختر اللاعب لكشفه.';
+            else if (roleKey === 'manager') instructionSpoken = 'قرر التكتيك الخاص.';
+            speakText(instructionSpoken);
+
+            let html = `
+                <div style="width:100%;">
+                    <h3 style="color:${rInfo.color}; margin-bottom:10px;"><i class="fa-solid ${rInfo.icon}"></i> ${rInfo.name} - التنفيذ السري</h3>
+                    <p style="color:var(--text-muted); margin-bottom:20px;">اختر اللاعب المطلوب دون أن يراك أحد:</p>
+                    <div style="display:flex; flex-direction:column; gap:10px; max-height:240px; overflow-y:auto; width:100%;">
+            `;
+
+            gameSession.players.forEach(p => {
+                if (p.isAlive) {
+                    html += `
+                        <div class="action-card">
+                            <span style="font-weight:bold; font-size:1.1rem;">${p.name}</span>
+                            <button class="btn-sm" onclick="submitLocalNightAction('${roleKey}', '${p.id}')">اختيار هذا اللاعب</button>
+                        </div>
+                    `;
+                }
             });
-            tvGameData.assignedRoles = RolesRegistry.assignRoles(tvGameData.players, { doctor: true, detective: true });
-            tvGameData.currentIndex = 0;
-            showScreen('game-play-screen');
-            playTvNextRoleSequence();
+            html += `</div></div>`;
+            mainEl.innerHTML = html;
         }
 
-        function playTvNextRoleSequence() {
-            if (tvGameData.currentIndex >= tvGameData.players.length) {
-                const container = document.getElementById('game-main-content');
-                if (container) {
-                    container.innerHTML = `
-                        <div>
-                            <h2><i class="fa-solid fa-futbol" style="font-size:3rem; color:var(--primary-green); margin-bottom:15px;"></i> بدأت المعركة التكتيكية!</h2>
-                            <p style="color:var(--text-muted); margin:15px 0;">تم توزيع الأدوار. ابدأوا النقاش الحر.</p>
-                            <button class="btn-primary" onclick="showScreen('home-screen')">العودة للرئيسية</button>
+        function submitLocalNightAction(roleKey, targetId) {
+            SoundFX.playClick();
+            triggerVibration([150, 100]);
+
+            if (roleKey === 'doctor') {
+                let doctorPlayer = gameSession.players.find(p => p.role === 'doctor');
+                let isSelfHeal = doctorPlayer && doctorPlayer.id === targetId;
+
+                if (isSelfHeal) {
+                    if (gameSession.doctorSelfHealCount >= 1) {
+                        showToast('عذراً، لا يمكنك علاج نفسك أكثر من مرة طوال المعسكر!', 'error');
+                        speakText('لا يمكنك علاج نفسك أكثر من مرة.');
+                        return;
+                    }
+                }
+
+                if (targetId === gameSession.doctorLastTarget) {
+                    showToast('عذراً، لا يمكنك علاج نفس اللاعب ليلتين متتاليتين!', 'error');
+                    speakText('لا يمكنك علاج نفس اللاعب ليلتين متتاليتين.');
+                    return;
+                }
+
+                gameSession.doctorLastTarget = targetId;
+                if (isSelfHeal) gameSession.doctorSelfHealCount++;
+            }
+
+            gameSession.nightActions[roleKey] = targetId;
+
+            if (roleKey === 'scout') {
+                let targetPlayer = gameSession.players.find(p => p.id === targetId);
+                let isSaboteur = targetPlayer && targetPlayer.role === 'saboteur';
+                
+                const mainEl = document.getElementById('game-main-content');
+                if (mainEl) {
+                    mainEl.innerHTML = `
+                        <div class="tv-night-mode-box w-100" style="padding: 30px;">
+                            <i class="fa-solid fa-binoculars" style="font-size: 3rem; color: var(--warning-yellow); margin-bottom: 15px;"></i>
+                            <h3 style="color: var(--warning-yellow); margin-bottom: 15px;">نتيجة الكشف السري</h3>
+                            <div style="font-size: 1.4rem; font-weight: bold; margin: 20px 0; padding: 15px; border-radius: 14px; background: rgba(0,0,0,0.6); border: 1px solid ${isSaboteur ? 'var(--danger-red)' : 'var(--primary-green)'};">
+                                ${isSaboteur ? '❌ هذا اللاعب هو المخرب.' : '✅ هذا اللاعب بريء ومخلص.'}
+                            </div>
+                            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">ستختفي هذه النتيجة تلقائياً أو عبر الضغط أدناه:</p>
+                            <button class="btn-primary" onclick="finishScoutActionAndPass()" style="width: 100%;">متابعة وإخفاء النتيجة</button>
                         </div>
                     `;
                 }
                 return;
             }
-            const p = tvGameData.players[tvGameData.currentIndex];
-            const container = document.getElementById('game-main-content');
-            if (!container) return;
-            container.innerHTML = `
-                <div>
-                    <i class="fa-solid fa-mobile-screen-button" style="font-size:3.5rem; color:var(--primary-green); margin-bottom:15px;"></i>
-                    <h2>مرر الجهاز إلى اللاعب</h2>
-                    <div style="font-size:2rem; font-weight:bold; color:var(--text-main); margin:15px 0;">${p.name}</div>
-                    <button class="btn-primary" id="tv-ready-btn">أنا جاهز، اكشف دوري</button>
-                </div>
-            `;
-            const readyBtn = document.getElementById('tv-ready-btn');
-            if (readyBtn) {
-                readyBtn.onclick = () => {
-                    const rKey = tvGameData.assignedRoles[p.id];
-                    const rInfo = RolesRegistry.roles[rKey];
-                    container.innerHTML = `
-                        <div>
-                            <h2 style="color:var(--primary-green); margin-bottom:10px;">${rInfo.name}</h2>
-                            <p style="color:var(--text-muted); margin-bottom:25px;">${rInfo.description}</p>
-                            <div id="tv-cd" style="font-size:2rem; color:var(--warning-yellow);">5</div>
-                        </div>
-                    `;
-                    let cd = 5;
-                    const iv = setInterval(() => {
-                        cd--;
-                        const el = document.getElementById('tv-cd');
-                        if (el) el.textContent = cd;
-                        if (cd <= 0) {
-                            clearInterval(iv);
-                            tvGameData.currentIndex++;
-                            playTvNextRoleSequence();
-                        }
-                    }, 1000);
-                };
+
+            proceedToReturnPhonePrompt(roleKey);
+        }
+
+        function finishScoutActionAndPass() {
+            proceedToReturnPhonePrompt('scout');
+        }
+
+        function proceedToReturnPhonePrompt(roleKey) {
+            speakText('أغلق الشاشة وأعد الهاتف.');
+            const mainEl = document.getElementById('game-main-content');
+            if (mainEl) {
+                mainEl.innerHTML = `
+                    <div class="tv-night-mode-box w-100">
+                        <i class="fa-solid fa-mobile-screen-button" style="font-size:3rem; color:var(--primary-green); margin-bottom:15px;"></i>
+                        <h3 style="color:var(--primary-green); margin-bottom:12px;">أعد الهاتف إلى منتصف الطاولة</h3>
+                        <p style="font-size:1.2rem; color:var(--text-main); margin-bottom:25px;">انتهى دورك تماماً. أغلق الشاشة ومرر الجهاز دون أن يرى أحد أي تفاصيل.</p>
+                        <button class="btn-primary" onclick="advanceNightStep()" style="width:100%;">تم إرجاع الهاتف، متابعة</button>
+                    </div>
+                `;
             }
         }
 
-        /* --- 🌐 Online Game Engine & Firebase Synchronization (المنظومة الاحترافية للأونلاين) --- */
-        let currentRoomCode = null;
-        let currentRoomRef = null;
-        let roomListenerRef = null;
-        let disconnectRef = null;
-        let clientClockInterval = null;
-        let actionLocked = false;
-
-        let currentPlayerData = { id: '', name: '', isHost: false, online: true };
-
-        // زر إنشاء غرفة
-        const createRoomBtn = document.getElementById('confirm-create-room');
-        if (createRoomBtn) {
-            createRoomBtn.addEventListener('click', async () => {
-                if (actionLocked) return;
-                if (!currentUser) {
-                    showToast('جاري الاتصال السحابي، انتظر قليلاً...', 'error');
-                    return;
-                }
-                const nameInput = document.getElementById('host-name-input');
-                const codeInput = document.getElementById('create-room-code');
-                if (!nameInput || !codeInput) return;
-
-                const name = nameInput.value.trim().substring(0, 25);
-                const code = codeInput.value.trim();
-
-                if (!name || !code) {
-                    showToast('الرجاء إدخال الاسم ورمز الغرفة.', 'error');
-                    return;
-                }
-                if (code.length < 4 || code.length > 8 || isNaN(code)) {
-                    showToast('رمز الغرفة أرقام من 4 إلى 8 خانات.', 'error');
-                    return;
-                }
-
-                actionLocked = true;
-                createRoomBtn.disabled = true;
-
-                currentPlayerData.id = currentUser.uid;
-                currentPlayerData.name = name;
-                currentPlayerData.isHost = true;
-                currentPlayerData.online = true;
-
-                try {
-                    const roomRef = rdb.ref('rooms/' + code);
-                    const snap = await roomRef.once('value');
-                    if (snap.exists()) {
-                        throw new Error('رمز الغرفة مستخدم مسبقاً.');
-                    }
-
-                    await roomRef.set({
-                        hostId: currentPlayerData.id,
-                        status: 'waiting',
-                        settings: { discussionTime: 45, votingTime: 30, doctor: true, detective: true },
-                        players: { [currentPlayerData.id]: currentPlayerData },
-                        gameState: { phase: 'waiting', round: 1, timerEnd: 0 }
-                    });
-
-                    currentRoomCode = code;
-                    currentRoomRef = roomRef;
-                    
-                    localStorage.setItem('sport_mafia_active_room', code);
-                    localStorage.setItem('sport_mafia_player_name', name);
-
-                    setupOnlineRoomListeners(code);
-                    showScreen('room-waiting-screen');
-                    const codeDisplay = document.getElementById('display-room-code');
-                    if (codeDisplay) codeDisplay.textContent = code;
-                } catch (err) {
-                    showToast(err.message || 'حدث خطأ أثناء الإنشاء.', 'error');
-                } finally {
-                    actionLocked = false;
-                    createRoomBtn.disabled = false;
-                }
-            });
+        function advanceNightStep() {
+            SoundFX.playClick();
+            nightStepIndex++;
+            renderNightTransitionStep();
         }
 
-        // زر انضمام لغرفة
-        const joinRoomBtn = document.getElementById('confirm-join-room');
-        if (joinRoomBtn) {
-            joinRoomBtn.addEventListener('click', async () => {
-                if (actionLocked) return;
-                if (!currentUser) {
-                    showToast('جاري الاتصال السحابي، انتظر قليلاً...', 'error');
-                    return;
+        function resolveNightPhase() {
+            nightStepIndex = 0;
+            let saboteurTargetId = gameSession.nightActions.saboteur;
+            let doctorTargetId = gameSession.nightActions.doctor;
+
+            let injuredName = null;
+            if (saboteurTargetId && saboteurTargetId !== doctorTargetId) {
+                let victim = gameSession.players.find(p => p.id === saboteurTargetId);
+                if (victim) {
+                    victim.isAlive = false;
+                    injuredName = victim.name;
                 }
-                const nameInput = document.getElementById('join-name-input');
-                const codeInput = document.getElementById('join-room-code');
-                if (!nameInput || !codeInput) return;
+            }
 
-                const name = nameInput.value.trim().substring(0, 25);
-                const code = codeInput.value.trim();
+            if (checkWinCondition()) return;
 
-                if (!name || !code) {
-                    showToast('الرجاء إدخال الاسم ورمز الغرفة.', 'error');
-                    return;
-                }
+            SoundFX.playSunrise();
+            speakText('استيقظ المعسكر.');
+            triggerVibration([200, 200, 200]);
 
-                actionLocked = true;
-                joinRoomBtn.disabled = true;
-
-                currentPlayerData.id = currentUser.uid;
-                currentPlayerData.name = name;
-                currentPlayerData.isHost = false;
-                currentPlayerData.online = true;
-
-                try {
-                    const roomRef = rdb.ref('rooms/' + code);
-                    const snap = await roomRef.once('value');
-                    if (!snap.exists()) {
-                        throw new Error('الغرفة غير موجودة.');
-                    }
-                    const data = snap.val();
-                    if (data.status !== 'waiting') {
-                        if (data.players && data.players[currentPlayerData.id]) {
-                            await rdb.ref(`rooms/${code}/players/${currentPlayerData.id}`).update({ online: true });
-                        } else {
-                            throw new Error('اللعبة قد بدأت بالفعل ولا يمكن الانضمام.');
-                        }
-                    } else {
-                        await rdb.ref(`rooms/${code}/players/${currentPlayerData.id}`).set(currentPlayerData);
-                    }
-
-                    currentRoomCode = code;
-                    currentRoomRef = roomRef;
-
-                    localStorage.setItem('sport_mafia_active_room', code);
-                    localStorage.setItem('sport_mafia_player_name', name);
-
-                    setupOnlineRoomListeners(code);
-                    showScreen('room-waiting-screen');
-                    const codeDisplay = document.getElementById('display-room-code');
-                    if (codeDisplay) codeDisplay.textContent = code;
-                    
-                    const settingsBox = document.getElementById('room-settings-container');
-                    if (settingsBox) settingsBox.style.display = 'none';
-                } catch (err) {
-                    showToast(err.message || 'فشل الانضمام للغرفة.', 'error');
-                } finally {
-                    actionLocked = false;
-                    joinRoomBtn.disabled = false;
-                }
-            });
-        }
-
-        // بدء اللعبة من طرف المضيف فقط
-        const startOnlineGameBtn = document.getElementById('start-online-game-btn');
-        if (startOnlineGameBtn) {
-            startOnlineGameBtn.addEventListener('click', async () => {
-                if (!currentRoomRef || !currentPlayerData.isHost || actionLocked) return;
+            triggerCinematicTransition('gameplay-screen', '☀️ شروق النهار في المعسكر...', 'fa-solid fa-sun');
+            setTimeout(() => {
+                showScreen('gameplay-screen');
+                const titleEl = document.getElementById('game-phase-title');
+                const mainEl = document.getElementById('game-main-content');
+                if (titleEl) titleEl.textContent = 'تقرير الإصابات الصباحي';
                 
-                const discInput = document.getElementById('setting-discussion');
-                const voteInput = document.getElementById('setting-voting');
-                const docCheck = document.getElementById('role-doctor');
-                const detCheck = document.getElementById('role-detective');
-
-                const discTime = discInput ? parseInt(discInput.value) || 45 : 45;
-                const voteTime = voteInput ? parseInt(voteInput.value) || 30 : 30;
-                const docActive = docCheck ? docCheck.checked : true;
-                const detActive = detCheck ? detCheck.checked : true;
-
-                actionLocked = true;
-                startOnlineGameBtn.disabled = true;
-
-                try {
-                    const snap = await currentRoomRef.child('players').once('value');
-                    const playersObj = snap.val() || {};
-                    const playersArr = Object.values(playersObj).filter(p => p.online);
-                    
-                    if (playersArr.length < 3) {
-                        showToast('تحتاج إلى 3 لاعبين متصلين على الأقل لبدء المعركة.', 'error');
-                        actionLocked = false;
-                        startOnlineGameBtn.disabled = false;
-                        return;
-                    }
-
-                    const assigned = RolesRegistry.assignRoles(playersArr, { doctor: docActive, detective: detActive });
-
-                    // استخدام وقت الخادم مع تعويض التأخير
-                    const timeOffsetRef = rdb.ref('.info/serverTimeOffset');
-                    const offsetSnap = await timeOffsetRef.once('value');
-                    const serverTime = Date.now() + (offsetSnap.val() || 0);
-
-                    await currentRoomRef.update({
-                        status: 'playing',
-                        settings: { discussionTime: discTime, votingTime: voteTime, doctor: docActive, detective: detActive },
-                        roles: assigned,
-                        gameState: {
-                            phase: 'night',
-                            round: 1,
-                            timerEnd: serverTime + 20000,
-                            nightActions: {},
-                            votes: {},
-                            eliminated: {},
-                            detectiveResults: {},
-                            logs: [`بدأت الجولة الأولى - المرحلة الليلية`]
-                        }
-                    });
-                } catch (err) {
-                    showToast('حدث خطأ أثناء بدء اللعبة.', 'error');
-                } finally {
-                    actionLocked = false;
-                    startOnlineGameBtn.disabled = false;
+                if (mainEl) {
+                    mainEl.innerHTML = `
+                        <div>
+                            <i class="fa-solid fa-sun" style="font-size:3.5rem; color:var(--warning-yellow); margin-bottom:15px;"></i>
+                            <h2 style="margin-bottom:10px;">تقرير الصباح والتقرير الطبي</h2>
+                            <p style="font-size:1.3rem; color:var(--text-main); margin:20px 0;">
+                                ${injuredName ? `تعرض اللاعب <b style="color:var(--danger-red);">${injuredName}</b> لإصابة بليغة وغاب عن التدريبات الصباحية!` : 'تدريبات الفريق سارت بسلاسة تامة ولم تُسجل أي إصابات بفضل العلاج الناجح!'}
+                            </p>
+                            <button class="btn-primary" onclick="startDiscussionPhase()" style="margin-top:20px;">بدء نقاش النادي</button>
+                        </div>
+                    `;
                 }
-            });
+            }, 800);
         }
 
-        function setupOnlineRoomListeners(code) {
-            const playerRef = rdb.ref(`rooms/${code}/players/${currentPlayerData.id}`);
-            disconnectRef = playerRef.onDisconnect();
-            disconnectRef.update({ online: false });
+        function startDiscussionPhase() {
+            SoundFX.playClick();
+            speakText('من سبب إصابة اللاعب؟ ابدأوا النقاش.');
+            gameSession.phase = 'discussion';
+            showScreen('gameplay-screen');
+            const titleEl = document.getElementById('game-phase-title');
+            const mainEl = document.getElementById('game-main-content');
+            if (titleEl) titleEl.textContent = '🗣️ نقاش النادي';
 
-            roomListenerRef = rdb.ref('rooms/' + code);
-            roomListenerRef.on('value', async (snap) => {
-                if (!snap.exists()) {
-                    showToast('تم إغلاق الغرفة من قبل المضيف.', 'error');
-                    leaveRoomCleanup();
-                    showScreen('online-menu-screen');
-                    return;
-                }
-                const roomData = snap.val();
-                const players = roomData.players || {};
-                
-                // تحديث حالة المضيف الحالي بناءً على الاتصال
-                if (!players[roomData.hostId] || !players[roomData.hostId].online) {
-                    const remaining = Object.entries(players).filter(([id, p]) => p.online);
-                    if (remaining.length > 0) {
-                        const newHostId = remaining[0][0];
-                        if (newHostId === currentPlayerData.id && roomData.hostId !== newHostId) {
-                            await rdb.ref(`rooms/${code}`).update({ hostId: newHostId });
-                            currentPlayerData.isHost = true;
-                            const settingsBox = document.getElementById('room-settings-container');
-                            if (settingsBox) settingsBox.style.display = 'block';
-                            showToast('تم تعيينك مضيفاً جديداً للغرفة.');
-                        }
-                    }
-                } else if (roomData.hostId === currentPlayerData.id) {
-                    currentPlayerData.isHost = true;
-                    const settingsBox = document.getElementById('room-settings-container');
-                    if (settingsBox) settingsBox.style.display = 'block';
-                }
+            const discTimeInput = document.getElementById('setting-discussion-time');
+            let timeLeft = discTimeInput ? parseInt(discTimeInput.value) || 45 : 45;
 
-                Object.entries(players).forEach(([pId, p]) => {
-                    if (!p.online && roomData.status === 'waiting') {
-                        rdb.ref(`rooms/${code}/players/${pId}`).remove();
-                    }
-                });
+            if (mainEl) {
+                mainEl.innerHTML = `
+                    <div>
+                        <i class="fa-solid fa-comments" style="font-size:3rem; color:var(--primary-green); margin-bottom:15px;"></i>
+                        <h3 style="margin-bottom:10px; font-size:1.5rem; color:var(--primary-green);">من سبب إصابة اللاعب؟</h3>
+                        <p style="color:var(--text-muted); margin-bottom:15px;">ناقشوا بحرية وراجعوا مجريات التدريبات السابقة لاكتشاف المخرب!</p>
+                        <div id="disc-timer" style="font-size:2.5rem; font-weight:bold; color:var(--primary-green); margin:20px 0;">00:${timeLeft < 10 ? '0' : ''}${timeLeft}</div>
+                        <button class="btn-primary" onclick="prepareVotingPhase()">الانتقال للتصويت الحاسم</button>
+                    </div>
+                `;
+            }
 
-                if (roomData.status === 'waiting') {
-                    const listEl = document.getElementById('online-players-list');
-                    if (listEl) {
-                        listEl.innerHTML = '';
-                        let count = 0;
-                        Object.entries(players).forEach(([pId, p]) => {
-                            count++;
-                            listEl.innerHTML += `
-                                <div class="player-item-row">
-                                    <span>${p.name} ${pId === roomData.hostId ? '(المضيف)' : ''}</span>
-                                    <span class="status-badge ${p.online ? 'status-online' : 'status-offline'}">${p.online ? 'متصل' : 'منقطع'}</span>
-                                </div>
-                            `;
-                        });
-                        const countNum = document.getElementById('players-count-num');
-                        if (countNum) countNum.textContent = count;
-                    }
-                } else if (roomData.status === 'playing') {
-                    renderOnlineGameScreen(roomData);
-                }
-            });
-
-            // مؤقت زمني دقيق يعمل محلياً وسحابياً لتحديث العداد بانتظام
-            if (clientClockInterval) clearInterval(clientClockInterval);
-            clientClockInterval = setInterval(async () => {
-                if (!currentRoomRef) return;
-                const snap = await currentRoomRef.child('gameState/timerEnd').once('value');
-                const timerEnd = snap.val();
-                if (timerEnd && currentPlayerData.isHost) {
-                    const timeOffsetRef = rdb.ref('.info/serverTimeOffset');
-                    const offsetSnap = await timeOffsetRef.once('value');
-                    const serverTime = Date.now() + (offsetSnap.val() || 0);
-                    if (serverTime >= timerEnd) {
-                        const fullSnap = await currentRoomRef.once('value');
-                        if (fullSnap.exists()) {
-                            handlePhaseTransition(fullSnap.val());
-                        }
-                    }
+            if (gameSession.timerInterval) clearInterval(gameSession.timerInterval);
+            gameSession.timerInterval = setInterval(() => {
+                timeLeft--;
+                const timerEl = document.getElementById('disc-timer');
+                if (timerEl) timerEl.textContent = `00:${timeLeft < 10 ? '0' : ''}${timeLeft}`;
+                if (timeLeft <= 0) {
+                    clearInterval(gameSession.timerInterval);
+                    prepareVotingPhase();
                 }
             }, 1000);
         }
 
-        function renderOnlineGameScreen(roomData) {
-            const screen = document.getElementById('game-play-screen');
-            if (screen && !screen.classList.contains('active')) {
-                showScreen('game-play-screen');
+        let votingPlayerIndex = 0;
+
+        function prepareVotingPhase() {
+            if (gameSession.timerInterval) clearInterval(gameSession.timerInterval);
+            speakText('حان وقت التصويت لإبعاد المشتبه به.');
+            gameSession.phase = 'voting';
+            gameSession.votes = {};
+            votingPlayerIndex = 0;
+            showPassBeforeVoteScreen();
+        }
+
+        function showPassBeforeVoteScreen() {
+            while (votingPlayerIndex < gameSession.players.length && !gameSession.players[votingPlayerIndex].isAlive) {
+                votingPlayerIndex++;
             }
 
-            const gState = roomData.gameState || {};
-            const rolesMap = roomData.roles || {};
-            const myRoleKey = rolesMap[currentPlayerData.id] || 'player';
-            const myRoleInfo = RolesRegistry.roles[myRoleKey] || RolesRegistry.roles.player;
-            const players = roomData.players || {};
-
-            const isEliminated = gState.eliminated && gState.eliminated[currentPlayerData.id];
-
-            let phaseTitleText = '';
-            let contentHtml = '';
-
-            const remainingSecs = Math.max(0, Math.floor(((gState.timerEnd || Date.now()) - Date.now()) / 1000));
-            const timerEl = document.getElementById('game-timer');
-            if (timerEl) {
-                timerEl.innerHTML = `<i class="fa-solid fa-clock"></i> 00:${remainingSecs < 10 ? '0' : ''}${remainingSecs}`;
+            if (votingPlayerIndex >= gameSession.players.length) {
+                resolveVotingPhase();
+                return;
             }
 
-            if (gState.phase === 'night') {
-                phaseTitleText = 'المرحلة الليلية (تأهب وتخفي)';
-                if (isEliminated) {
-                    contentHtml = `<h3>تم إقصاؤك من المعركة. أنت تشاهد كـمراقب.</h3>`;
-                } else {
-                    contentHtml = `
-                        <div style="margin-bottom:15px;">
-                            <h3 style="color:var(--primary-green); margin-bottom:5px;">دورك: ${myRoleInfo.name}</h3>
-                            <p style="color:var(--text-muted); font-size:0.95rem;">${myRoleInfo.description}</p>
+            let voter = gameSession.players[votingPlayerIndex];
+            showScreen('gameplay-screen');
+            const titleEl = document.getElementById('game-phase-title');
+            const mainEl = document.getElementById('game-main-content');
+            if (titleEl) titleEl.textContent = '🗳️ التصويت السري للنادي';
+
+            if (mainEl) {
+                mainEl.innerHTML = `
+                    <div class="tv-night-mode-box w-100">
+                        <i class="fa-solid fa-mobile-screen-button" style="font-size:3rem; color:var(--primary-green); margin-bottom:15px;"></i>
+                        <h3 style="color:var(--primary-green); margin-bottom:12px;">مرر الهاتف إلى اللاعب التالي</h3>
+                        <p style="font-size:1.3rem; font-weight:bold; color:var(--text-main); margin-bottom:20px;">اللاعب المعني بالتصويت: ${voter.name}</p>
+                        <p style="color:var(--text-muted); font-size:0.95rem; margin-bottom:25px;">تأكد أن اللاعب وحده من ينظر للشاشة:</p>
+                        <button class="btn-primary" onclick="renderVotingScreen()" style="width:100%;">أنا اللاعب المعني، عرض خيارات التصويت</button>
+                    </div>
+                `;
+            }
+        }
+
+        function renderVotingScreen() {
+            SoundFX.playClick();
+            triggerVibration([100]);
+            let voter = gameSession.players[votingPlayerIndex];
+            showScreen('gameplay-screen');
+            const titleEl = document.getElementById('game-phase-title');
+            const mainEl = document.getElementById('game-main-content');
+            if (titleEl) titleEl.textContent = '🗳️ التصويت السري لإبعاد المشتبه به';
+
+            if (mainEl) {
+                let html = `
+                    <div style="width:100%;">
+                        <h3 style="margin-bottom:5px;">المصوت الحالي: <span style="color:var(--primary-green);">${voter.name}</span></h3>
+                        <p style="color:var(--text-muted); margin-bottom:20px; font-size:0.95rem;">من تعتقد أنه سبب الإصابة؟ اختر للاستبعاد:</p>
+                        <div class="voting-grid">
+                `;
+                gameSession.players.forEach(p => {
+                    if (p.id !== voter.id) {
+                        html += `
+                            <div class="player-vote-card ${!p.isAlive ? 'eliminated' : ''}">
+                                <i class="fa-solid fa-user-shield" style="font-size:2rem; color:${p.isAlive ? 'var(--primary-green)' : 'var(--text-muted)'};"></i>
+                                <b style="font-size:1.1rem;">${p.name}</b>
+                                <span style="font-size:0.8rem; color:var(--text-muted);">${p.isAlive ? 'موجود بالمعسكر' : 'مستبعد'}</span>
+                                ${p.isAlive ? `<button class="btn-sm" style="width:100%; margin-top:5px;" onclick="submitLocalVote('${voter.id}', '${p.id}')">تصويت</button>` : ''}
+                            </div>
+                        `;
+                    }
+                });
+                html += `</div></div>`;
+                mainEl.innerHTML = html;
+            }
+        }
+
+        function submitLocalVote(voterId, targetId) {
+            SoundFX.playClick();
+            triggerVibration([150]);
+            gameSession.votes[voterId] = targetId;
+
+            const mainEl = document.getElementById('game-main-content');
+            if (mainEl) {
+                mainEl.innerHTML = `
+                    <div class="tv-night-mode-box w-100">
+                        <i class="fa-solid fa-circle-check" style="font-size:3rem; color:var(--primary-green); margin-bottom:15px;"></i>
+                        <h3 style="color:var(--primary-green); margin-bottom:12px;">تم تسجيل صوتك بنجاح</h3>
+                        <p style="font-size:1.1rem; color:var(--text-main); margin-bottom:25px;">أغلق الشاشة ومرر الهاتف إلى منتصف الطاولة.</p>
+                        <button class="btn-primary" onclick="advanceVotingPlayer()" style="width:100%;">تم التمرير، اللاعب التالي</button>
+                    </div>
+                `;
+            }
+        }
+
+        function advanceVotingPlayer() {
+            votingPlayerIndex++;
+            showPassBeforeVoteScreen();
+        }
+
+        function resolveVotingPhase() {
+            let tally = {};
+            Object.values(gameSession.votes).forEach(targetId => {
+                tally[targetId] = (tally[targetId] || 0) + 1;
+            });
+
+            let mostVotedId = null;
+            let maxVotes = 0;
+            let isTie = false;
+
+            Object.entries(tally).forEach(([tId, count]) => {
+                if (count > maxVotes) {
+                    maxVotes = count;
+                    mostVotedId = tId;
+                    isTie = false;
+                } else if (count === maxVotes) {
+                    isTie = true;
+                }
+            });
+
+            let eliminatedName = null;
+            if (mostVotedId && !isTie) {
+                let victim = gameSession.players.find(p => p.id === mostVotedId);
+                if (victim) {
+                    victim.isAlive = false;
+                    eliminatedName = victim.name;
+                }
+            }
+
+            if (checkWinCondition()) return;
+
+            showScreen('gameplay-screen');
+            const titleEl = document.getElementById('game-phase-title');
+            const mainEl = document.getElementById('game-main-content');
+            if (titleEl) titleEl.textContent = 'قرار مجلس الإدارة';
+
+            if (mainEl) {
+                mainEl.innerHTML = `
+                    <div>
+                        <i class="fa-solid fa-gavel" style="font-size:3.5rem; color:var(--warning-yellow); margin-bottom:15px;"></i>
+                        <h2 style="margin-bottom:10px;">نتيجة تصويت المعسكر</h2>
+                        <p style="font-size:1.2rem; color:var(--text-main); margin:15px 0;">
+                            ${eliminatedName ? `قرر مجلس إدارة النادي استبعاد اللاعب <b style="color:var(--danger-red);">${eliminatedName}</b> لثبوت الشبهات حوله.` : 'تعادل في أصوات المعسكر! لم يتم استبعاد أحد هذه الجولة.'}
+                        </p>
+                        <button class="btn-primary" onclick="startNightPhase()" style="margin-top:20px;">بدء الليلة التالية</button>
+                    </div>
+                `;
+            }
+        }
+
+        function checkWinCondition() {
+            let aliveGood = gameSession.players.filter(p => p.isAlive && p.role !== 'saboteur').length;
+            let aliveEvil = gameSession.players.filter(p => p.isAlive && p.role === 'saboteur').length;
+
+            if (aliveEvil === 0) {
+                SoundFX.playWin();
+                speakText('انتصر النادي.');
+                triggerVibration([200, 100, 200, 100, 400]);
+                renderGameOverScreen('🏆 انتصر النادي!', 'نجح أفراد الفريق في حماية النادي وإبعاد المخرب بنجاح!');
+                return true;
+            } else if (aliveEvil >= aliveGood) {
+                SoundFX.playWin();
+                speakText('انتصر المخرب.');
+                triggerVibration([400, 100, 400]);
+                renderGameOverScreen('🏆 انتصر المخرب!', 'نجح المخرب في تعطيل نجوم الفريق والسيطرة على المعسكر!');
+                return true;
+            }
+            return false;
+        }
+
+        function renderGameOverScreen(statusText, message) {
+            gameSession.phase = 'gameover';
+            triggerCinematicTransition('gameplay-screen', statusText, 'fa-solid fa-trophy');
+            setTimeout(() => {
+                showScreen('gameplay-screen');
+                const titleEl = document.getElementById('game-phase-title');
+                const mainEl = document.getElementById('game-main-content');
+                if (titleEl) titleEl.textContent = 'نهاية معسكر النادي';
+
+                let html = `
+                    <div style="width:100%;">
+                        <h2 style="font-size:2.3rem; font-weight:900; color:var(--primary-green); margin-bottom:10px;">${statusText}</h2>
+                        <p style="font-size:1.1rem; color:var(--text-muted); margin-bottom:20px;">${message}</p>
+                        <h3 style="margin-bottom:15px; color:var(--primary-green);">أدوار جميع أفراد النادي</h3>
+                        <div style="display:flex; flex-direction:column; gap:10px; max-height:240px; overflow-y:auto; margin-bottom:20px;">
+                `;
+
+                gameSession.players.forEach(p => {
+                    let rInfo = RolesRegistry.roles[p.role];
+                    html += `
+                        <div class="action-card">
+                            <span><b>${p.name}</b> ${p.isAlive ? '✅' : '❌'}</span>
+                            <span style="color:${rInfo.color}; font-weight:bold;">${rInfo.name}</span>
                         </div>
                     `;
-                    if (myRoleInfo.nightAction) {
-                        const alreadyActed = gState.nightActions && gState.nightActions[currentPlayerData.id];
-                        if (alreadyActed) {
-                            contentHtml += `<h3 style="color:var(--warning-yellow); margin-top:15px;">تم تسجيل إجراءك الليلي بنجاح. بانتظار طلوع النهار...</h3>`;
-                        } else {
-                            contentHtml += `<h4 style="margin:10px 0;">اختر هدفك لليلة:</h4><div style="display:flex; flex-direction:column; gap:10px; max-height:220px; overflow-y:auto; width:100%;">`;
-                            Object.entries(players).forEach(([pId, p]) => {
-                                if (pId !== currentPlayerData.id && p.online && (!gState.eliminated || !gState.eliminated[pId])) {
-                                    let actionLabel = "تنفيذ الإجراء";
-                                    if (myRoleKey === 'detective') actionLabel = "فحص الهوية";
-                                    if (myRoleKey === 'doctor') actionLabel = "حماية اللاعب";
-                                    if (myRoleKey === 'saboteur') actionLabel = "استهداف للعرقلة";
-
-                                    contentHtml += `
-                                        <div class="action-card">
-                                            <span>${p.name}</span>
-                                            <button class="btn-sm" onclick="submitNightAction('${pId}')">${actionLabel}</button>
-                                        </div>
-                                    `;
-                                }
-                            });
-                            contentHtml += `</div>`;
-                        }
-                    } else {
-                        contentHtml += `<p style="margin-top:20px; color:var(--text-muted);">اللاعبون المميزون ينفذون مهامهم الآن... انتظر طلوع النهار.</p>`;
-                    }
-                    
-                    // إظهار نتيجة الكشف للكشاف التقني إن وجدت
-                    if (myRoleKey === 'detective' && gState.detectiveResults && gState.detectiveResults[currentPlayerData.id]) {
-                        const res = gState.detectiveResults[currentPlayerData.id];
-                        contentHtml += `<div style="margin-top:15px; background:rgba(255,204,0,0.1); border:1px solid var(--warning-yellow); padding:10px; border-radius:10px; color:var(--warning-yellow);">نتيجة الفحص الأخير: ${res}</div>`;
-                    }
-                }
-            } else if (gState.phase === 'discussion') {
-                phaseTitleText = 'مرحلة النقاش الحر والتحليل';
-                contentHtml = `
-                    <div>
-                        <i class="fa-solid fa-comments" style="font-size:3rem; color:var(--primary-green); margin-bottom:15px;"></i>
-                        <h3 style="margin-bottom:10px;">انقاشوا بحرية واكتشفوا المخربين!</h3>
-                        <p style="color:var(--text-muted);">سيبدأ التصويت الجماعي تلقائياً فور انتهاء عداد النقاش.</p>
-                    </div>
-                `;
-            } else if (gState.phase === 'voting') {
-                phaseTitleText = 'مرحلة التصويت الحاسم';
-                if (isEliminated) {
-                    contentHtml = `<h3>أنت مقصى، بانتظار نتائج التصويت...</h3>`;
-                } else {
-                    const alreadyVoted = gState.votes && gState.votes[currentPlayerData.id];
-                    if (alreadyVoted) {
-                        contentHtml = `<h3>تم تسجيل صوتك بنجاح. بانتظار بقية اللاعبين...</h3>`;
-                    } else {
-                        contentHtml = `
-                            <h3 style="margin-bottom:15px;">صوت على اللاعب المشتبه به:</h3>
-                            <div style="display:flex; flex-direction:column; gap:10px; max-height:240px; overflow-y:auto; width:100%;">
-                        `;
-                        Object.entries(players).forEach(([pId, p]) => {
-                            if (pId !== currentPlayerData.id && p.online && (!gState.eliminated || !gState.eliminated[pId])) {
-                                contentHtml += `
-                                    <div class="action-card">
-                                        <span>${p.name}</span>
-                                        <button class="btn-sm" onclick="submitVote('${pId}')">تصويت ضده</button>
-                                    </div>
-                                `;
-                            }
-                        });
-                        contentHtml += `</div>`;
-                    }
-                }
-            } else if (gState.phase === 'gameover') {
-                phaseTitleText = 'نهاية المعركة الرياضية';
-                contentHtml = `
-                    <div>
-                        <i class="fa-solid fa-trophy" style="font-size:3.5rem; color:var(--warning-yellow); margin-bottom:15px;"></i>
-                        <h2 style="font-size:2rem; margin-bottom:10px;">${gState.winnerMessage || 'انتهت اللعبة!'}</h2>
-                        <button class="btn-primary" onclick="leaveRoom()" style="margin-top:20px;">العودة للقائمة الرئيسية</button>
-                    </div>
-                `;
-            }
-
-            const titleEl = document.getElementById('game-phase-title');
-            const mainContentEl = document.getElementById('game-main-content');
-            if (titleEl) titleEl.textContent = phaseTitleText;
-            if (mainContentEl) mainContentEl.innerHTML = contentHtml;
-        }
-
-        async function submitNightAction(targetId) {
-            if (!currentRoomCode || actionLocked) return;
-            actionLocked = true;
-            try {
-                await rdb.ref(`rooms/${currentRoomCode}/gameState/nightActions/${currentPlayerData.id}`).set(targetId);
-                showToast('تم تسجيل إجراءك الليلي بنجاح.');
-            } catch (err) {
-                showToast('فشل تسجيل الإجراء.', 'error');
-            } finally {
-                actionLocked = false;
-            }
-        }
-
-        async function submitVote(targetId) {
-            if (!currentRoomCode || actionLocked) return;
-            actionLocked = true;
-            try {
-                await rdb.ref(`rooms/${currentRoomCode}/gameState/votes/${currentPlayerData.id}`).set(targetId);
-                showToast('تم تسجيل صوتك بنجاح.');
-            } catch (err) {
-                showToast('فشل تسجيل الصوت.', 'error');
-            } finally {
-                actionLocked = false;
-            }
-        }
-
-        // محرك State Machine الاحترافي لانتقال المراحل وحساب الفوز بدقة تامة وتوفير وقت الخادم
-        async function handlePhaseTransition(roomData) {
-            if (!currentRoomCode || !currentPlayerData.isHost) return;
-            const gState = roomData.gameState || {};
-            
-            const timeOffsetRef = rdb.ref('.info/serverTimeOffset');
-            const offsetSnap = await timeOffsetRef.once('value');
-            const now = Date.now() + (offsetSnap.val() || 0);
-
-            if (gState.timerEnd && now < gState.timerEnd) return;
-
-            const settings = roomData.settings || { discussionTime: 45, votingTime: 30 };
-            const players = roomData.players || {};
-
-            try {
-                if (gState.phase === 'night') {
-                    let actions = gState.nightActions || {};
-                    let eliminated = gState.eliminated || {};
-                    let detectiveResults = {};
-                    let mafiaTargets = [];
-                    let doctorTarget = null;
-
-                    Object.entries(actions).forEach(([actorId, targetId]) => {
-                        const role = roomData.roles[actorId];
-                        if (role === 'saboteur') mafiaTargets.push(targetId);
-                        if (role === 'doctor') doctorTarget = targetId;
-                        if (role === 'detective') {
-                            const targetRole = roomData.roles[targetId];
-                            const targetPlayer = players[targetId];
-                            const targetName = targetPlayer ? targetPlayer.name : 'اللاعب';
-                            const isEvil = targetRole === 'saboteur';
-                            detectiveResults[actorId] = `اللاعب ${targetName} ${isEvil ? 'ينتمي لفريق المخربين (مافيا)!' : 'بريء وينتمي للفريق الرياضي.'}`;
-                        }
-                    });
-
-                    let targetToEliminate = mafiaTargets.length > 0 ? mafiaTargets[0] : null;
-
-                    if (targetToEliminate && targetToEliminate !== doctorTarget) {
-                        eliminated[targetToEliminate] = true;
-                    }
-
-                    let aliveGood = 0;
-                    let aliveEvil = 0;
-                    Object.keys(players).forEach(pId => {
-                        if (!eliminated[pId]) {
-                            if (roomData.roles[pId] === 'saboteur') aliveEvil++;
-                            else aliveGood++;
-                        }
-                    });
-
-                    if (aliveEvil === 0) {
-                        await rdb.ref(`rooms/${currentRoomCode}/gameState`).update({
-                            phase: 'gameover',
-                            winnerMessage: 'فاز الفريق الرياضي (المدنيون) ببراعة وإتقان!',
-                            timerEnd: now + 999999000
-                        });
-                        return;
-                    } else if (aliveEvil >= aliveGood) {
-                        await rdb.ref(`rooms/${currentRoomCode}/gameState`).update({
-                            phase: 'gameover',
-                            winnerMessage: 'فاز فريق المخربين وسيطروا على الملعب بالكامل!',
-                            timerEnd: now + 999999000
-                        });
-                        return;
-                    }
-
-                    await rdb.ref(`rooms/${currentRoomCode}/gameState`).update({
-                        phase: 'discussion',
-                        nightActions: null,
-                        eliminated: eliminated,
-                        detectiveResults: detectiveResults,
-                        timerEnd: now + (settings.discussionTime * 1000)
-                    });
-
-                } else if (gState.phase === 'discussion') {
-                    await rdb.ref(`rooms/${currentRoomCode}/gameState`).update({
-                        phase: 'voting',
-                        timerEnd: now + (settings.votingTime * 1000)
-                    });
-
-                } else if (gState.phase === 'voting') {
-                    let votes = gState.votes || {};
-                    let tally = {};
-                    Object.values(votes).forEach(targetId => {
-                        tally[targetId] = (tally[targetId] || 0) + 1;
-                    });
-
-                    let mostVoted = null;
-                    let maxVotes = 0;
-                    let isTie = false;
-
-                    Object.entries(tally).forEach(([tId, count]) => {
-                        if (count > maxVotes) {
-                            maxVotes = count;
-                            mostVoted = tId;
-                            isTie = false;
-                        } else if (count === maxVotes) {
-                            isTie = true;
-                        }
-                    });
-
-                    let eliminated = gState.eliminated || {};
-                    if (mostVoted && !isTie) {
-                        eliminated[mostVoted] = true;
-                    }
-
-                    let aliveGood = 0;
-                    let aliveEvil = 0;
-                    Object.keys(players).forEach(pId => {
-                        if (!eliminated[pId]) {
-                            if (roomData.roles[pId] === 'saboteur') aliveEvil++;
-                            else aliveGood++;
-                        }
-                    });
-
-                    if (aliveEvil === 0) {
-                        await rdb.ref(`rooms/${currentRoomCode}/gameState`).update({
-                            phase: 'gameover',
-                            winnerMessage: 'فاز الفريق الرياضي (المدنيون) بإقصاء جميع المخربين!',
-                            timerEnd: now + 999999000
-                        });
-                        return;
-                    } else if (aliveEvil >= aliveGood) {
-                        await rdb.ref(`rooms/${currentRoomCode}/gameState`).update({
-                            phase: 'gameover',
-                            winnerMessage: 'فاز فريق المخربين وسيطروا على اللعبة!',
-                            timerEnd: now + 999999000
-                        });
-                        return;
-                    }
-
-                    await rdb.ref(`rooms/${currentRoomCode}/gameState`).update({
-                        phase: 'night',
-                        round: (gState.round || 1) + 1,
-                        votes: null,
-                        eliminated: eliminated,
-                        detectiveResults: null,
-                        timerEnd: now + 20000
-                    });
-                }
-            } catch (err) {
-                console.error("Phase Transition Error:", err);
-            }
-        }
-
-        function leaveRoom() {
-            if (currentRoomCode && currentPlayerData.id) {
-                rdb.ref(`rooms/${currentRoomCode}/players/${currentPlayerData.id}`).remove().then(() => {
-                    leaveRoomCleanup();
-                    showScreen('online-menu-screen');
-                }).catch(() => {
-                    leaveRoomCleanup();
-                    showScreen('online-menu-screen');
                 });
-            } else {
-                leaveRoomCleanup();
-                showScreen('online-menu-screen');
-            }
+
+                html += `
+                        </div>
+                        <button class="btn-primary" onclick="showScreen('home-screen')" style="width:100%;">العودة للقائمة الرئيسية</button>
+                    </div>
+                `;
+                if (mainEl) mainEl.innerHTML = html;
+            }, 800);
         }
-
-        function leaveRoomCleanup() {
-            if (roomListenerRef && currentRoomCode) {
-                rdb.ref('rooms/' + currentRoomCode).off('value');
-            }
-            if (disconnectRef) {
-                disconnectRef.cancel();
-            }
-            if (clientClockInterval) {
-                clearInterval(clientClockInterval);
-            }
-            localStorage.removeItem('sport_mafia_active_room');
-            localStorage.removeItem('sport_mafia_player_name');
-            currentRoomCode = null;
-            currentRoomRef = null;
-            roomListenerRef = null;
-        }
-
-        async function attemptReconnect(roomCode, playerName) {
-            if (!currentUser) return;
-            try {
-                const roomRef = rdb.ref('rooms/' + roomCode);
-                const snap = await roomRef.once('value');
-                if (snap.exists()) {
-                    const data = snap.val();
-                    currentRoomCode = roomCode;
-                    currentRoomRef = roomRef;
-                    currentPlayerData.id = currentUser.uid;
-                    currentPlayerData.name = playerName;
-                    currentPlayerData.online = true;
-
-                    await rdb.ref(`rooms/${roomCode}/players/${currentUser.uid}`).update({ online: true });
-                    setupOnlineRoomListeners(roomCode);
-                    if (data.status === 'playing') {
-                        showScreen('game-play-screen');
-                    } else {
-                        showScreen('room-waiting-screen');
-                        const codeDisplay = document.getElementById('display-room-code');
-                        if (codeDisplay) codeDisplay.textContent = roomCode;
-                    }
-                    showToast('تمت استعادة اتصالك بالجلسة بنجاح.');
-                }
-            } catch (e) {
-                localStorage.removeItem('sport_mafia_active_room');
-                localStorage.removeItem('sport_mafia_player_name');
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            console.log('Sport Mafia 2026 Production Ready Fully Secured Architecture Initialized.');
-        });
     </script>
 </body>
 </html>
