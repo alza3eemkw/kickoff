@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة ألعاب التكتيك الرياضي | Sport Club 2026 - الإصدار المحلي الاحترافي (TV Mode)</title>
+    <title>SPORT CLUB 2026
+
+By
+منصة الزعيم الرياضية</title>
     <!-- Google Fonts: Cairo -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
     <!-- FontAwesome Icons -->
@@ -277,7 +280,8 @@
     <div id="cinematic-overlay">
         <div id="cinematic-icon" style="font-size: 4.5rem; margin-bottom: 20px; color: var(--primary-green);"></div>
         <div id="cinematic-main-text" class="cinematic-title">SPORT CLUB</div>
-        <div id="cinematic-sub-text" class="cinematic-subtitle">جاري الدخول إلى النادي...</div>
+        <div id="cinematic-sub-text" class="cinematic-subtitle">منصة الزعيم الرياضية
+تقدم لكم تجربة المعسكر الاحترافي</div>
     </div>
 
     <div class="app-container">
@@ -325,12 +329,12 @@
                     </div>
 
                     <div class="guide-step-card" data-step="2">
-                        <h3><i class="fa-solid fa-tv"></i> 2. خصوصية المعسكر (TV Mode)</h3>
-                        <p>تعتمد اللعبة على جهاز محلي واحد يُمرر بحذر شديد بين اللاعبين في الغرفة باستخدام شاشات سوداء وتنبيهات صارمة لمنع كشف الهويات.</p>
+                        <h3><i class="fa-solid fa-tv"></i> 2.</h3>
+                        <p>تعتمد اللعبة على جهاز واحد يُمرر بحذر شديد بين اللاعبين في الغرفة باستخدام شاشات سوداء وتنبيهات صارمة لمنع كشف الهويات.</p>
                     </div>
 
                     <div class="guide-step-card" data-step="3">
-                        <h3><i class="fa-solid fa-mobile-screen-button"></i> 3. طريقة تمرير الهاتف الآمنة</h3>
+                        <h3><i class="fa-solid fa-mobile-screen-button"></i> 3. طريقة تمرير الهاتف </h3>
                         <p>عندما يطلب منك استلام الدور، تأكد أنك وحدك تمسك الهاتف، وبعد تفقد مهامك الليلية أو بطاقتك، أغلق الشاشة وأعد الجهاز لمنتصف الطاولة.</p>
                     </div>
 
@@ -452,13 +456,7 @@
                         <span>تشغيل الاهتزاز (Vibration)</span>
                         <button class="btn-sm" id="toggle-vibe-btn" onclick="toggleVibrationSetting()">مفعل (تشغيل)</button>
                     </div>
-                    <div class="action-card">
-                        <span>التعليق الصوتي الآلي (Text-to-Speech)</span>
-                        <button class="btn-sm" id="toggle-tts-btn" onclick="toggleTtsSetting()">مفعل (تشغيل)</button>
-                    </div>
-                </div>
-                <button class="btn-primary" onclick="showScreen('home-screen')" style="width: 100%;">حفظ والعودة للقائمة الرئيسية</button>
-            </div>
+                    <div class="action-card"></div>
         </section>
 
         <!-- 5. شاشة إعدادات المعسكر المحلي -->
@@ -467,7 +465,7 @@
                 <h2><i class="fa-solid fa-gear"></i> إعدادات معسكر النادي (Local Offline)</h2>
                 <div class="scrollable-content" style="margin-top: 20px;">
                     <div class="input-group">
-                        <label>عدد اللاعبين (من 5 إلى 15):</label>
+                        <label>عدد اللاعبين (من 6 إلى 15):</label>
                         <div style="display: flex; gap: 10px;">
                             <input type="number" id="players-count-input" min="5" max="15" value="6" style="flex: 1;">
                             <button class="btn-secondary" onclick="generatePlayerNameInputs()">تحديث القائمة</button>
@@ -523,7 +521,7 @@
             <div class="glass-panel">
                 <h2><i class="fa-solid fa-circle-info"></i> حول اللعبة</h2>
                 <p style="color: var(--text-muted); line-height: 1.8; margin: 20px 0;">
-                    Sport Club 2026 هي النسخة الرياضية المخصصة لأجواء أندية كرة القدم (Local Offline TV Mode). تجمع بين حماس التكتيك، أدوار المدير الفني، اللاعبين، الطبيب، الكشاف، والمخرب، في تجربة سرية بالكامل ومحاكاة حقيقية لمعسكر الفريق.
+                    تم تطوير هذه اللعبة وتصميمها بالكامل بواسطة منصة الزعيم الرياضية، وهي لعبة اجتماعية محلية مستوحاة من أجواء معسكرات كرة القدم، وجميع الحقوق محفوظة.
                 </p>
                 <button class="btn-primary" onclick="showScreen('home-screen')" style="width: 100%;">العودة للقائمة الرئيسية</button>
             </div>
@@ -558,13 +556,7 @@
             showToast(audioSettings.vibeEnabled ? 'تم تفعيل الاهتزاز' : 'تم إيقاف الاهتزاز');
         }
 
-        function toggleTtsSetting() {
-            audioSettings.ttsEnabled = !audioSettings.ttsEnabled;
-            const btn = document.getElementById('toggle-tts-btn');
-            if (btn) btn.textContent = audioSettings.ttsEnabled ? 'مفعل (تشغيل)' : 'معطل (إيقاف)';
-            showToast(audioSettings.ttsEnabled ? 'تم تفعيل التعليق الصوتي' : 'تم إيقاف التعليق الصوتي');
-        }
-
+        
         function triggerVibration(pattern = [200, 100, 200]) {
             if (audioSettings.vibeEnabled && window.navigator && window.navigator.vibrate) {
                 try { window.navigator.vibrate(pattern); } catch(e) {}
@@ -837,8 +829,8 @@
                 });
             });
 
-            if (playersList.length < 5) {
-                showToast('يجب أن يكون عدد اللاعبين 5 على الأقل.', 'error');
+            if (playersList.length < 6) {
+                showToast('يجب أن يكون عدد اللاعبين 6 على الأقل.', 'error');
                 return;
             }
 
